@@ -19,7 +19,11 @@ public class AppDbContext : DbContext
     public DbSet<DealReviews> DealReviews { get; set; } = null!;
     public DbSet<Customers> Customers { get; set; } = null!;
     public DbSet<KycDocument> KycDocuments { get; set; } = null!;
-    public DbSet<ForeClosureRequest> ForeClosureRequests { get; set; } = null!; public DbSet<User> Users { get; set; } = null!;
+    public DbSet<LoanAccount> LoanAccounts { get; set; }
+    public DbSet<EmiSchedule> EmiSchedules { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<ForeClosureRequest> ForeClosureRequests { get; set; } = null!; 
+    public DbSet<User> Users { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,10 +47,7 @@ public class AppDbContext : DbContext
             entity.Property(x => x.ForeClosureAmount).HasColumnType("decimal(18,2)");
             entity.Property(x => x.PartialAmount).HasColumnType("decimal(18,2)");
 
-    public DbSet<ForeClosureRequest> ForeClosureRequests { get; set; }
-    public DbSet<LoanAccount> LoanAccounts { get; set; }
-    public DbSet<EmiSchedule> EmiSchedules { get; set; }
-    public DbSet<Notification> Notifications { get; set; }
+  
 
 
 
