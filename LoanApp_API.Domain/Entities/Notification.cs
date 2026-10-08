@@ -21,6 +21,6 @@ namespace LoanApp_API.Domain.Entities
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public Customer? Customer { get; set; }
+        public Customers? Customer { get; set; }
     }
 }

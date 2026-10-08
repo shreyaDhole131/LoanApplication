@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LoanApp_API.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,17 @@ public class AppDbContext : DbContext
         {
 
         }
+
+    public DbSet<LoanDeals> LoanDeals;
+
+    public DbSet<SanctionLetters> SanctionLetters;
+
+    public DbSet<Disbursements> Disbursements;
+
+    public DbSet<DealReviews> DealReviews;
+
+    public DbSet<Customers> Customers;
+
     public DbSet<ForeClosureRequest> ForeClosureRequests { get; set; }
     public DbSet<LoanAccount> LoanAccounts { get; set; }
     public DbSet<EmiSchedule> EmiSchedules { get; set; }
@@ -24,6 +36,7 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
 
 
         modelBuilder.Entity<LoanAccount>()
@@ -50,6 +63,48 @@ public class AppDbContext : DbContext
            .WithMany(c => c.Notifications)
            .HasForeignKey(n => n.CustomerId)
            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Disbursements>(d =>
+        {
+            d.HasOne(x => x.deals)
+            .WithOne(x => x.disbursement)
+            .HasForeignKey<Disbursements>(x => x.DealId)
+            .OnDelete(DeleteBehavior.Restrict);
+        }
+        );
+        modelBuilder.Entity<SanctionLetters>(s =>
+        {
+            s.HasOne(x => x.deals)
+            .WithOne(x => x.sanctionLetters)
+            .HasForeignKey<SanctionLetters>(x => x.DealId)
+            .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<DealReviews>(d =>
+        {
+            d.HasOne(x => x.deals)
+            .WithOne(x => x.dealReviews)
+            .HasForeignKey<DealReviews>(x => x.DealId)
+            .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<DealReviews>(d =>
+        {
+            d.HasOne(x => x.users)
+            .WithMany(x => x.dealReviews)
+            .HasForeignKey(x => x.OfficerId)
+            .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<LoanDeals>(d =>
+        {
+            d.HasOne(x => x.customers)
+            .WithMany(x => x.loanDeals)
+            .HasForeignKey(x => x.CustomerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        });
+
 
     }
     }

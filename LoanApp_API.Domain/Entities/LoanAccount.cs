@@ -37,10 +37,10 @@ namespace LoanApp_API.Domain.Entities
 
         public DateTime CreatedAt { get; set; }
 
-        public Customer? Customer { get; set; }
+        public Customers? Customer { get; set; }
 
-        public LoanDeal? LoanDeal { get; set; }
+        public LoanDeals? LoanDeal { get; set; }
         
-        public List<EmiSchedule>? EmiSchedules { get; set; }
+        public List<EmiSchedule> EmiSchedules { get; set; }
     }
 }
