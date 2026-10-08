@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-
-namespace LoanApp_API.Domain.Entities
+﻿namespace LoanApp_API.Application.DTO.User
 {
-    public class User
+    public class UserResponseDto
     {
         public int UserId { get; set; }
 
@@ -20,9 +15,5 @@ namespace LoanApp_API.Domain.Entities
         public string Email { get; set; } = string.Empty;
 
         public string Mobile { get; set; } = string.Empty;
-
-        public string Password { get; set; } = string.Empty;
-
-
     }
 }

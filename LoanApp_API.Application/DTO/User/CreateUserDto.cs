@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-
-namespace LoanApp_API.Domain.Entities
+﻿namespace LoanApp_API.Application.DTO.User
 {
-    public class User
+    public class CreateUserDto
     {
-        public int UserId { get; set; }
-
         public int RoleId { get; set; }
 
         public int? CustomerId { get; set; }
@@ -22,7 +15,5 @@ namespace LoanApp_API.Domain.Entities
         public string Mobile { get; set; } = string.Empty;
 
         public string Password { get; set; } = string.Empty;
-
-
     }
 }
