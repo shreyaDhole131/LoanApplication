@@ -6,5 +6,6 @@ namespace LoanApp_API.Domain.Entities
 {
     public class User
     {
+        public List<DealReviews> dealReviews { get; set; }
     }
 }
