@@ -65,10 +65,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// Swagger
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 app.UseHttpsRedirection();
 
-app.UseSwagger();
-app.UseSwaggerUI();
 
 app.UseAuthentication();
 app.UseAuthorization();
