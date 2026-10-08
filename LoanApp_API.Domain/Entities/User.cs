@@ -7,6 +7,7 @@ namespace LoanApp_API.Domain.Entities
 {
     public class User
     {
+
         public int UserId { get; set; }
 
         public int RoleId { get; set; }
@@ -24,5 +25,6 @@ namespace LoanApp_API.Domain.Entities
         public string Password { get; set; } = string.Empty;
 
 
+        public List<DealReviews> dealReviews { get; set; }
     }
 }
