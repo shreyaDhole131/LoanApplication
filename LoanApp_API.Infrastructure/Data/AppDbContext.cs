@@ -43,12 +43,47 @@ public class AppDbContext : DbContext
             entity.Property(x => x.ForeClosureAmount).HasColumnType("decimal(18,2)");
             entity.Property(x => x.PartialAmount).HasColumnType("decimal(18,2)");
 
+    public DbSet<ForeClosureRequest> ForeClosureRequests { get; set; }
+    public DbSet<LoanAccount> LoanAccounts { get; set; }
+    public DbSet<EmiSchedule> EmiSchedules { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+
+
+
+
             // One loan account can have many foreclosure requests
             //entity.HasOne(x => x.LoanAccount)
             //      .WithMany()
             //      .HasForeignKey(x => x.LoanAccountId);
         });
 
+
+
+
+        modelBuilder.Entity<LoanAccount>()
+            .HasOne(la => la.LoanDeal)
+            .WithMany(ld => ld.LoanAccounts)
+            .HasForeignKey(la => la.DealId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
+        modelBuilder.Entity<LoanAccount>()
+            .HasOne(la => la.Customer)
+            .WithMany(c => c.LoanAccounts)
+            .HasForeignKey(la => la.CustomerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<EmiSchedule>()
+            .HasOne(es => es.LoanAccount)
+            .WithMany(la => la.EmiSchedules)
+            .HasForeignKey(es => es.LoanAccountId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Notification>()
+           .HasOne(n => n.Customer)
+           .WithMany(c => c.Notifications)
+           .HasForeignKey(n => n.CustomerId)
+           .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Disbursements>(d =>
         {
