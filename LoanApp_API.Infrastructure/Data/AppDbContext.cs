@@ -33,9 +33,25 @@ public class AppDbContext : DbContext
             relationship.DeleteBehavior =
                 DeleteBehavior.NoAction;
         }
-    
 
-    modelBuilder.Entity<Disbursements>(d =>
+        // FORECLOSURE
+        modelBuilder.Entity<ForeClosureRequest>(entity =>
+        {
+            // Pk
+            entity.HasKey(x => x.RequestId);
+
+            // Money columns: 18 digits total, 2 after the decimal point
+            entity.Property(x => x.ForeClosureAmount).HasColumnType("decimal(18,2)");
+            entity.Property(x => x.PartialAmount).HasColumnType("decimal(18,2)");
+
+            // One loan account can have many foreclosure requests
+            //entity.HasOne(x => x.LoanAccount)
+            //      .WithMany()
+            //      .HasForeignKey(x => x.LoanAccountId);
+        });
+
+
+        modelBuilder.Entity<Disbursements>(d =>
         {
             d.HasOne(x => x.deals)
             .WithOne(x => x.disbursement)
