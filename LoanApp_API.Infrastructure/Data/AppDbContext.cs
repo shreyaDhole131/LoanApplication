@@ -40,6 +40,22 @@ public class AppDbContext : DbContext
             .HasForeignKey<SanctionLetters>(x => x.DealId)
             .OnDelete(DeleteBehavior.Restrict);
         });
+
+        modelBuilder.Entity<DealReviews>(d =>
+        {
+            d.HasOne(x => x.deals)
+            .WithOne(x => x.dealReviews)
+            .HasForeignKey<DealReviews>(x => x.DealId)
+            .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<DealReviews>(d =>
+        {
+            d.HasOne(x => x.users)
+            .WithMany(x => x.dealReviews)
+            .HasForeignKey(x => x.OfficerId)
+            .OnDelete(DeleteBehavior.Restrict);
+        });
     }
     }
 

@@ -41,5 +41,9 @@ namespace LoanApp_API.Domain.Entities
         public Disbursements disbursement { get; set; }
 
         public SanctionLetters sanctionLetters { get; set; }
+
+        public DealReviews dealReviews { get; set; }
+
+
     }
 }
