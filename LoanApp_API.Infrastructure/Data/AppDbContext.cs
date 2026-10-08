@@ -22,6 +22,8 @@ public class AppDbContext : DbContext
 
     public DbSet<DealReviews> DealReviews;
 
+    public DbSet<Customers> Customers;
+
     public DbSet<ForeClosureRequest> ForeClosureRequests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -59,6 +61,17 @@ public class AppDbContext : DbContext
             .HasForeignKey(x => x.OfficerId)
             .OnDelete(DeleteBehavior.Restrict);
         });
+
+        modelBuilder.Entity<LoanDeals>(d =>
+        {
+            d.HasOne(x => x.customers)
+            .WithMany(x => x.loanDeals)
+            .HasForeignKey(x => x.CustomerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        });
+
+
     }
     }
 
