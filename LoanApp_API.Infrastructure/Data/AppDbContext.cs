@@ -12,16 +12,15 @@ public class AppDbContext : DbContext
         {
 
         }
-
+    public DbSet<SupportTicket> SupportTickets { get; set; } = null!;
     public DbSet<LoanDeals> LoanDeals { get; set; } = null!;
     public DbSet<SanctionLetters> SanctionLetters { get; set; } = null!;
     public DbSet<Disbursements> Disbursements { get; set; } = null!;
     public DbSet<DealReviews> DealReviews { get; set; } = null!;
     public DbSet<Customers> Customers { get; set; } = null!;
-
-    public DbSet<ForeClosureRequest> ForeClosureRequests { get; set; }
-    public DbSet<User> Users { get; set; }
-
+    public DbSet<KycDocument> KycDocuments { get; set; } = null!;
+    public DbSet<ForeClosureRequest> ForeClosureRequests { get; set; } = null!; public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Role> Roles { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -62,7 +61,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<DealReviews>(d =>
         {
             d.HasOne(x => x.users)
-            .WithMany(x => x.dealReviews)
+            .WithMany(x => x.DealReviews)
             .HasForeignKey(x => x.OfficerId)
             .OnDelete(DeleteBehavior.Restrict);
         });
@@ -76,7 +75,25 @@ public class AppDbContext : DbContext
 
         });
 
+        modelBuilder.Entity<KycDocument>(k =>
+        {
+            k.HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+        modelBuilder.Entity<SupportTicket>(s =>
+        {
+            s.HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
 
+            s.HasOne(x => x.LoanAccount)
+                .WithMany()
+                .HasForeignKey(x => x.LoanAccountId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
     }
     }
 
