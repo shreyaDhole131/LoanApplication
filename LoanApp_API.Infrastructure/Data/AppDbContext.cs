@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using LoanApp_API.Domain.Entities;
 
 namespace LoanApp_API.Infrastructure.Data;
 
@@ -11,6 +12,8 @@ public class AppDbContext : DbContext
         {
 
         }
+    public DbSet<ForeClosureRequest> ForeClosureRequests { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
