@@ -4,8 +4,8 @@ using System.Text;
 
 namespace LoanApp_API.Domain.Entities
 {
-    public class User
+    public class Customers
     {
-        public List<DealReviews> dealReviews { get; set; }
+        public List<LoanDeals> loanDeals;
     }
 }
