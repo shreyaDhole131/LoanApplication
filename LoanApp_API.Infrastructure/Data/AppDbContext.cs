@@ -25,8 +25,17 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+    
+        foreach (var relationship in modelBuilder.Model
+            .GetEntityTypes()
+            .SelectMany(e => e.GetForeignKeys()))
+        {
+            relationship.DeleteBehavior =
+                DeleteBehavior.NoAction;
+        }
+    
 
-        modelBuilder.Entity<Disbursements>(d =>
+    modelBuilder.Entity<Disbursements>(d =>
         {
             d.HasOne(x => x.deals)
             .WithOne(x => x.disbursement)
