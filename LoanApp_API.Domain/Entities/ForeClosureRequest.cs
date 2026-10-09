@@ -48,6 +48,6 @@ namespace LoanApp_API.Domain.Entities
         [ForeignKey("User")]
         public int? ClosedBy { get; set; }
 
-       // public LoanAccount? LoanAccount { get; set; }
+        public LoanAccount? LoanAccount { get; set; }
     }
 }

@@ -1,13 +1,30 @@
+using LoanApp_API.Application.Interfaces;
 using LoanApp_API.Infrastructure.Data;
+using LoanApp_API.Infrastructure.Repositories;
+using LoanApp_API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+builder.Services.AddMemoryCache();
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("fixed", limiterOptions =>
+    {
+        limiterOptions.PermitLimit = 10;
+        limiterOptions.Window = TimeSpan.FromMinutes(1);
+        limiterOptions.QueueLimit = 0;
+    });
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
@@ -58,6 +75,8 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 
+builder.Services.AddScoped<IUserService, UserService>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -65,8 +84,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-
-// Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -75,6 +92,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();

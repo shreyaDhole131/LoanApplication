@@ -32,5 +32,8 @@ namespace LoanApp_API.Domain.Entities
         public int IsEmailVerified { get; set; }
 
         public List<LoanDeals> loanDeals { get; set; }
+
+        public List<LoanAccount> LoanAccounts { get; set; }
+        public List<Notification> Notifications { get; set; }
     }
 }
