@@ -62,7 +62,11 @@ namespace LoanApp_API.Infrastructure.Repositories
                 InterestRate = s.InterestRate,
                 TenureMonths = s.TenureMonths,
                 EmiAmount = s.EmiAmount,
-                AppliedDate = s.CreatedAt
+                AppliedDate = s.CreatedAt,
+                IsDisbursed = s.deals.disbursement != null,      
+                DisbursementStatus = s.deals.disbursement == null
+                            ? "Not Disbursed"
+                            : "Disbursed"
             }).ToListAsync();
         }
 
@@ -95,7 +99,7 @@ namespace LoanApp_API.Infrastructure.Repositories
 
             if (!string.IsNullOrEmpty(sort))
             {
-                query = sort?.ToLower() == "Ascending" ? query.OrderBy(s => s.CreatedAt) : query.OrderByDescending(s => s.CreatedAt);
+                query = sort?.ToLower() == "ascending" ? query.OrderBy(s => s.CreatedAt) : query.OrderByDescending(s => s.CreatedAt);
             }
 
             return await query.Select(s => new SanctionGridDTO
@@ -107,7 +111,11 @@ namespace LoanApp_API.Infrastructure.Repositories
                 InterestRate = s.InterestRate,
                 TenureMonths = s.TenureMonths,
                 EmiAmount = s.EmiAmount,
-                AppliedDate = s.CreatedAt
+                AppliedDate = s.CreatedAt,
+                IsDisbursed = s.deals.disbursement != null,       
+                DisbursementStatus = s.deals.disbursement == null
+                            ? "Not Disbursed"
+                            : "Disbursed"
             }).ToListAsync();
         }
     }

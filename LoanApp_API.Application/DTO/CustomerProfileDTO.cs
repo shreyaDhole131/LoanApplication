@@ -4,27 +4,26 @@ using System.Text;
 
 namespace LoanApp_API.Application.DTO
 {
-    public class SanctionGridDTO
+    public class CustomerProfileDTO
     {
-        public int CustomerID { get; set; }
-
         public string CustomerName { get; set; }
 
-        public decimal LoanAmount { get; set; }
+        public string MobileNo { get; set; }
+
+        public string Pan { get; set; }
+
+        public string AadhaarNo { get; set; }
+
+        public string MonthlyIncome { get; set; }
 
         public string LoanType { get; set; }
 
+        public decimal LoanAmount { get; set; }
 
         public int InterestRate { get; set; }
 
         public int TenureMonths { get; set; }
 
         public decimal EmiAmount { get; set; }
-
-
-        public DateTime AppliedDate { get; set; }
-
-        public string DisbursementStatus { get; set; }     
-        public bool IsDisbursed { get; set; }
     }
 }
