@@ -5,6 +5,7 @@ namespace LoanApp_API.Domain.Entities
 {
     public class User
     {
+
         [Key]
         public int UserId { get; set; }
 
@@ -24,6 +25,7 @@ namespace LoanApp_API.Domain.Entities
         public Customers? Customer { get; set; }
 
         public List<DealReviews>? DealReviews { get; set; }
+
     }
 
 }
