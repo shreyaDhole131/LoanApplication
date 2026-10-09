@@ -12,6 +12,9 @@ public class AppDbContext : DbContext
         {
 
         }
+
+    public DbSet<LoanPayment> LoanPayment { get; set; } = null!;
+
     public DbSet<SupportTicket> SupportTickets { get; set; } = null!;
     public DbSet<LoanDeals> LoanDeals { get; set; } = null!;
     public DbSet<SanctionLetters> SanctionLetters { get; set; } = null!;
@@ -46,11 +49,6 @@ public class AppDbContext : DbContext
             // Money columns: 18 digits total, 2 after the decimal point
             entity.Property(x => x.ForeClosureAmount).HasColumnType("decimal(18,2)");
             entity.Property(x => x.PartialAmount).HasColumnType("decimal(18,2)");
-
-
-
-
-
 
             // One loan account can have many foreclosure requests
             entity.HasOne(x => x.LoanAccount)
