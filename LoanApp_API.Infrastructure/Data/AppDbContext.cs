@@ -57,7 +57,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<DealReviews>(d =>
         {
             d.HasOne(x => x.users)
-            .WithMany(x => x.dealReviews)
+            .WithMany(x => x.DealReviews)
             .HasForeignKey(x => x.OfficerId)
             .OnDelete(DeleteBehavior.Restrict);
         });
