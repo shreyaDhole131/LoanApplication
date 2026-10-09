@@ -1,4 +1,3 @@
-```csharp
 using LoanApp_API.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -150,4 +149,3 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
-```
