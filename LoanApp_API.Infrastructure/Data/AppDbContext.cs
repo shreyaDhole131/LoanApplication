@@ -1,4 +1,4 @@
-```csharp
+
 using LoanApp_API.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +10,12 @@ public class AppDbContext : DbContext
         : base(options)
     {
     }
+
+
+        
+
+    public DbSet<LoanPayment> LoanPayment { get; set; } = null!;
+
 
     public DbSet<SupportTicket> SupportTickets { get; set; } = null!;
     public DbSet<LoanDeals> LoanDeals { get; set; } = null!;
@@ -48,6 +54,9 @@ public class AppDbContext : DbContext
 
             entity.Property(x => x.ForeClosureAmount)
                 .HasColumnType("decimal(18,2)");
+
+
+            // One loan account can have many foreclosure requests
 
             entity.Property(x => x.PartialAmount)
                 .HasColumnType("decimal(18,2)");
@@ -150,4 +159,3 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
-```

@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddScoped<IForeClosureRepository, ForeClosureRepository>();
 builder.Services.AddControllers();
 
 builder.Services.AddMemoryCache();
