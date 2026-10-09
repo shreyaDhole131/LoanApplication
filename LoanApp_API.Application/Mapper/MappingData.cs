@@ -12,6 +12,11 @@ namespace LoanApp_API.Application.Mapper
         public MappingData()
         {
             CreateMap<LoanDeals, LoanDealDTO>().ReverseMap();
+            CreateMap<LoanAccount, LoanAccountDto>().ForMember(
+                    dest => dest.CustomerName,
+                    opt => opt.MapFrom(src => src.Customer.FirstName + " " + src.Customer.LastName)
+                );
+
 
         }
     }
