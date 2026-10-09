@@ -8,6 +8,7 @@ namespace LoanApp_API.Domain.Entities
 {
     public class DealReviews
     {
+
         [Key]
         public int ReviewId { get; set; }
 
