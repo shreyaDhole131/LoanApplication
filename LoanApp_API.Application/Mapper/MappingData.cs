@@ -12,6 +12,11 @@ namespace LoanApp_API.Application.Mapper
         public MappingData()
         {
             CreateMap<LoanDeals, LoanDealDTO>().ReverseMap();
+            CreateMap<LoanDeals, SanctionPrefillDTO>();
+            CreateMap<CreateSanctionDTO, SanctionLetters>().ForMember(d => d.CreatedAt, o => o.MapFrom(_ => DateTime.UtcNow));
+            CreateMap<DisbursePrefillDTO, Disbursements>();
+
+            CreateMap<CreateDisbursementDTO, Disbursements>();
 
         }
     }
