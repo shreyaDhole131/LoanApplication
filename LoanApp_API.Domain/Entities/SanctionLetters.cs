@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -7,6 +8,7 @@ namespace LoanApp_API.Domain.Entities
 {
     public class SanctionLetters
     {
+        [Key]
         public int SanctionId { get; set; }
 
         [ForeignKey("DealId")]

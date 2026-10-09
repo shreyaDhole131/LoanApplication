@@ -47,15 +47,15 @@ public class AppDbContext : DbContext
             entity.Property(x => x.ForeClosureAmount).HasColumnType("decimal(18,2)");
             entity.Property(x => x.PartialAmount).HasColumnType("decimal(18,2)");
 
-  
+
 
 
 
 
             // One loan account can have many foreclosure requests
-            //entity.HasOne(x => x.LoanAccount)
-            //      .WithMany()
-            //      .HasForeignKey(x => x.LoanAccountId);
+            entity.HasOne(x => x.LoanAccount)
+                  .WithMany()
+                  .HasForeignKey(x => x.LoanAccountId);
         });
 
 
