@@ -22,6 +22,10 @@ public class AppDbContext : DbContext
     public DbSet<ForeClosureRequest> ForeClosureRequests { get; set; }
     public DbSet<User> Users { get; set; }
 
+    public DbSet<CibilReport> CibilReports { get; set; } = null!;
+    public DbSet<ScoreCard> ScoreCards { get; set; } = null!;
+    public DbSet<EligibilityResult> EligibilityResults { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -65,6 +69,30 @@ public class AppDbContext : DbContext
             .HasForeignKey(x => x.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        });
+
+        modelBuilder.Entity<CibilReport>(c =>
+        {
+            c.HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<ScoreCard>(s =>
+        {
+            s.HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<EligibilityResult>(e =>
+        {
+            e.HasOne(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
 

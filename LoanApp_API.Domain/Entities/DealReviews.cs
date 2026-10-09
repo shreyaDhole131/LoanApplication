@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -7,6 +8,8 @@ namespace LoanApp_API.Domain.Entities
 {
     public class DealReviews
     {
+
+        [Key]
         public int ReviewId { get; set; }
 
         [ForeignKey("DealId")]
