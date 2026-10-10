@@ -7,6 +7,13 @@ namespace LoanApp_API.Application.Interfaces
 {
     public interface IPendingDeals
     {
-        List<PendingDealsDTO> fetchPendingDeals();
+        Task<List<PendingDealsDTO>> fetchPendingDeals();
+
+        Task<CustomerProfileDTO?> fetchCustomerProfile(int dealId);
+
+        Task<List<PendingDealsDTO>> sortPendingDeals(string? LoanType,decimal? MinAmount,decimal? MaxAmount,string? dateFilter, DateOnly? FromFilter,
+            DateOnly? ToFilter);
+
+        Task reviewDeal(int dealId,string status);
     }
 }

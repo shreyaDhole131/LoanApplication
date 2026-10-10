@@ -6,8 +6,8 @@ namespace LoanApp_API.Application.DTO
 {
     public class PendingSanctionDTO
     {
-        public string Name;
+        public string Name { get; set; }
 
-        public int DealId;
+        public int DealId { get; set; }
     }
 }

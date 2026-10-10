@@ -6,6 +6,7 @@ namespace LoanApp_API.Application.DTO
 {
     public class CustomerProfileDTO
     {
+        public int DealId { get; set; }
         public string CustomerName { get; set; }
 
         public string MobileNo { get; set; }
