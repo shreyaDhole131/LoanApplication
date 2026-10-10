@@ -29,6 +29,7 @@ namespace LoanApp_API.Infrastructure.Repositories
             if (alreadyExists) throw new InvalidOperationException($"Deal {dto.DealId} already disbursed");
 
             var disb = mapper.Map<Disbursements>(dto);
+            disb.Status = "Disbursed";
 
             await db.Disbursements.AddAsync(disb);
 

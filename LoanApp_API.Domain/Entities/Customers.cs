@@ -35,5 +35,9 @@ namespace LoanApp_API.Domain.Entities
 
         public List<LoanAccount> LoanAccounts { get; set; }
         public List<Notification> Notifications { get; set; }
+
+        public CibilReport cibilReport { get; set; }
+
+
     }
 }

@@ -10,6 +10,6 @@ namespace LoanApp_API.Application.DTO
         public decimal DisburseAmount { get; set; }
         public string BankPartner { get; set; }
         public DateTime DisbursementDate { get; set; }
-        public string Status { get; set; }
+
     }
 }

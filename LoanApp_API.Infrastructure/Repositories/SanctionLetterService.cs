@@ -31,12 +31,12 @@ namespace LoanApp_API.Infrastructure.Repositories
 
         public async Task<List<PendingSanctionDTO>> fetchCustomers()
         {
-            return await db.DealReviews.Where(d => d.Status == "Approved" && !db.SanctionLetters.Any(s => s.DealId == d.DealId))
+            return await db.LoanDeals.Where(d => d.CurrentStatus == "Approved" && !db.SanctionLetters.Any(s => s.DealId == d.DealId))
                 .Select(d =>
                 
                     new PendingSanctionDTO { 
                         DealId = d.DealId,
-                        Name = d.deals.customers.FirstName + " " + d.deals.customers.LastName
+                        Name = d.customers.FirstName + " " + d.customers.LastName
                 }).ToListAsync();
 
         }
@@ -51,20 +51,24 @@ namespace LoanApp_API.Infrastructure.Repositories
 
         }
 
-        public async Task<List<SanctionGridDTO>> fetchSanctionGrids()
-        {
-            return await db.SanctionLetters.Include(s => s.deals).ThenInclude(s => s.customers).Select(s => new SanctionGridDTO
-            {
-                CustomerID = s.deals.customers.CustomerId,
-                CustomerName = s.deals.customers.FirstName + " " + s.deals.customers.LastName,
-                LoanAmount = s.LoanAmount,
-                LoanType = s.deals.LoanType,
-                InterestRate = s.InterestRate,
-                TenureMonths = s.TenureMonths,
-                EmiAmount = s.EmiAmount,
-                AppliedDate = s.CreatedAt
-            }).ToListAsync();
-        }
+        //public async Task<List<SanctionGridDTO>> fetchSanctionGrids()
+        //{
+        //    return await db.SanctionLetters.Include(s => s.deals).ThenInclude(s => s.customers).Select(s => new SanctionGridDTO
+        //    {
+        //        CustomerID = s.deals.customers.CustomerId,
+        //        CustomerName = s.deals.customers.FirstName + " " + s.deals.customers.LastName,
+        //        LoanAmount = s.LoanAmount,
+        //        LoanType = s.deals.LoanType,
+        //        InterestRate = s.InterestRate,
+        //        TenureMonths = s.TenureMonths,
+        //        EmiAmount = s.EmiAmount,
+        //        AppliedDate = s.CreatedAt,
+        //        IsDisbursed = s.deals.disbursement != null,      
+        //        DisbursementStatus = s.deals.disbursement == null
+        //                    ? "Not Disbursed"
+        //                    : "Disbursed"
+        //    }).ToListAsync();
+        //}
 
         public async Task<List<SanctionGridDTO>> fetchSanctionsGrid(string? name, string? FromDate, string? ToDate, string? Filter, string? sort)
         {
@@ -95,7 +99,7 @@ namespace LoanApp_API.Infrastructure.Repositories
 
             if (!string.IsNullOrEmpty(sort))
             {
-                query = sort?.ToLower() == "Ascending" ? query.OrderBy(s => s.CreatedAt) : query.OrderByDescending(s => s.CreatedAt);
+                query = sort?.ToLower() == "ascending" ? query.OrderBy(s => s.CreatedAt) : query.OrderByDescending(s => s.CreatedAt);
             }
 
             return await query.Select(s => new SanctionGridDTO
@@ -107,7 +111,11 @@ namespace LoanApp_API.Infrastructure.Repositories
                 InterestRate = s.InterestRate,
                 TenureMonths = s.TenureMonths,
                 EmiAmount = s.EmiAmount,
-                AppliedDate = s.CreatedAt
+                AppliedDate = s.CreatedAt,
+                IsDisbursed = s.deals.disbursement != null,       
+                DisbursementStatus = s.deals.disbursement == null
+                            ? "Not Disbursed"
+                            : "Disbursed"
             }).ToListAsync();
         }
     }

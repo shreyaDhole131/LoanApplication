@@ -1,4 +1,5 @@
 using LoanApp_API.Application.Interfaces;
+using LoanApp_API.Application.Mapper;
 using LoanApp_API.Infrastructure.Data;
 using LoanApp_API.Infrastructure.Repositories;
 using LoanApp_API.Middleware;
@@ -9,6 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 using System.Threading.RateLimiting;
+using LoanApp_API.Application.Mapper;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IForeClosureRepository, ForeClosureRepository>();
@@ -52,6 +55,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -75,7 +79,23 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 
+
+
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<ILoanDeals, LoanDealsService>();
+
+builder.Services.AddScoped<ISanctionLetter, SanctionLetterService>();
+
+builder.Services.AddScoped<IDisbursement, DisbursementService>();
+
+builder.Services.AddScoped<IPendingDeals, PendingDealsService>();
+
+
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"];
+}, typeof(MappingData).Assembly);
 
 var app = builder.Build();
 
@@ -92,7 +112,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseMiddleware<ExceptionMiddleware>();
+//app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseRateLimiter();
 
