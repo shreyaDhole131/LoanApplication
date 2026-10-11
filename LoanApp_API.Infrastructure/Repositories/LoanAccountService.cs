@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hangfire;
 using LoanApp_API.Application.DTO;
 using LoanApp_API.Application.Interfaces;
 using LoanApp_API.Domain.Entities;
@@ -14,10 +15,13 @@ namespace LoanApp_API.Infrastructure.Repositories
     {
         AppDbContext db;
         IMapper mapper;
-        public LoanAccountService(AppDbContext  db, IMapper mapper)
+        IBackgroundJobClient backgroundJobClient;
+
+        public LoanAccountService(AppDbContext  db, IMapper mapper, IBackgroundJobClient backgroundJobClient)
         {
             this.db = db;
             this.mapper = mapper;
+            this.backgroundJobClient = backgroundJobClient;
         }
 
         public async Task CreateLoanAccount(int disbursementId)
@@ -62,6 +66,11 @@ namespace LoanApp_API.Infrastructure.Repositories
             db.LoanAccounts.Add(loanAccount);
 
             await db.SaveChangesAsync();
+
+            backgroundJobClient.Enqueue<IEmiScheduleService>(
+        service => service.GenerateEMISchedule(
+            loanAccount.LoanAccountId
+        ));
         }
 
 

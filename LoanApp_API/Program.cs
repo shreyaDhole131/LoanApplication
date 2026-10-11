@@ -1,4 +1,7 @@
+using AutoMapper;
+using Hangfire;
 using LoanApp_API.Application.Interfaces;
+using LoanApp_API.Application.Mapper;
 using LoanApp_API.Infrastructure.Data;
 using LoanApp_API.Infrastructure.Repositories;
 using LoanApp_API.Middleware;
@@ -11,7 +14,7 @@ using System.Text;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddScoped<IForeClosureRepository, ForeClosureRepository>();
 builder.Services.AddControllers();
 
 builder.Services.AddMemoryCache();
@@ -75,7 +78,19 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 
+
+builder.Services.AddHangfire(config =>
+    config.UseSqlServerStorage(
+        builder.Configuration.GetConnectionString("dbconn")
+    ));
+
+builder.Services.AddHangfireServer();
+
+builder.Services.AddAutoMapper(cfg => { }, typeof(MappingData));
+
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ILoanAccountService, LoanAccountService  >();
+builder.Services.AddScoped<IEmiScheduleService, EmiScheduleService>();
 
 var app = builder.Build();
 
@@ -90,6 +105,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
 app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionMiddleware>();
@@ -100,5 +117,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseHangfireDashboard("/hangfire");
 
 app.Run();

@@ -40,7 +40,7 @@ namespace LoanApp_API.Domain.Entities
         public Customers? Customer { get; set; }
 
         public LoanDeals? LoanDeal { get; set; }
-        
-        public List<EmiSchedule> EmiSchedules { get; set; }
+
+        public List<EmiSchedule> EmiSchedules { get; set; } = new();
     }
 }
