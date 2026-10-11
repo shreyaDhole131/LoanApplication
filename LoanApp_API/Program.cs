@@ -1,5 +1,6 @@
 using LoanApp_API.Application.Interfaces;
 using LoanApp_API.Infrastructure.Data;
+using LoanApp_API.Infrastructure.Email;
 using LoanApp_API.Infrastructure.Repositories;
 using LoanApp_API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,6 +14,19 @@ using System.Threading.RateLimiting;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IForeClosureRepository, ForeClosureRepository>();
 builder.Services.AddScoped<IPaymentHistoryRepository, PaymentHistoryRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
+builder.Services.AddScoped<ICustomerProfileRepository, CustomerProfileRepository>();
+builder.Services.AddScoped<IKycRepository, KycRepository>();
+builder.Services.AddScoped<ICustomerDashboardRepository, CustomerDashboardRepository>();
+builder.Services.AddScoped<IOfficerDashboardRepository, OfficerDashboardRepository>();
+builder.Services.AddScoped<IOfficerCustomerProfileRepository,OfficerCustomerProfileRepository>();
+builder.Services.AddScoped<IOfficerKycRepository, OfficerKycRepository>();
+builder.Services.AddScoped<IOfficerSupportTicketRepository,OfficerSupportTicketRepository>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+
+
+
 builder.Services.AddControllers();
 
 builder.Services.AddMemoryCache();
