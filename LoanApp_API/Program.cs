@@ -13,6 +13,7 @@ using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IForeClosureRepository, ForeClosureRepository>();
+builder.Services.AddScoped<IPaymentHistoryRepository, PaymentHistoryRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
 builder.Services.AddScoped<ICustomerProfileRepository, CustomerProfileRepository>();
