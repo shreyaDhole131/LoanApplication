@@ -32,6 +32,8 @@ namespace LoanApp_API.Domain.Entities
 
         public DateTime? PaidDate { get; set; }
 
+        //public string ? CancellationReason { get; set; }
+
         public LoanAccount? LoanAccount { get; set; }
 
     }

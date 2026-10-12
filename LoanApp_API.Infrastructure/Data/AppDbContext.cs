@@ -12,7 +12,6 @@ public class AppDbContext : DbContext
     }
 
 
-        
 
     public DbSet<LoanPayment> LoanPayment { get; set; } = null!;
 
@@ -60,6 +59,7 @@ public class AppDbContext : DbContext
 
             entity.Property(x => x.PartialAmount)
                 .HasColumnType("decimal(18,2)");
+
 
             entity.HasOne(x => x.LoanAccount)
                 .WithMany()

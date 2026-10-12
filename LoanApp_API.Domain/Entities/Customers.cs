@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
-using System.Text;
 
 namespace LoanApp_API.Domain.Entities
 {
@@ -27,13 +25,20 @@ namespace LoanApp_API.Domain.Entities
 
         public string AadhaarNo { get; set; }
 
+        public string EmploymentType { get; set; } = string.Empty;
+
         public string MonthlyIncome { get; set; }
 
         public int IsEmailVerified { get; set; }
 
+        public string? EmailOtp { get; set; }
+
+        public DateTime? OtpExpiry { get; set; }
+
         public List<LoanDeals> loanDeals { get; set; }
 
         public List<LoanAccount> LoanAccounts { get; set; }
+
         public List<Notification> Notifications { get; set; }
 
         public CibilReport cibilReport { get; set; }

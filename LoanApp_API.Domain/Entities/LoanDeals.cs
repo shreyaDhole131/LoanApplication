@@ -47,7 +47,7 @@ namespace LoanApp_API.Domain.Entities
         public DealReviews dealReviews { get; set; }
 
         public List<LoanAccount> LoanAccounts { get; set; }
-        public List<EmiSchedule> EmiSchedules { get; set; }
+        //public List<EmiSchedule> EmiSchedules { get; set; }
 
 
     }
