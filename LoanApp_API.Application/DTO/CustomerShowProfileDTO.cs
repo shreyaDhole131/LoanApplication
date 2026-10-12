@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LoanApp_API.Application.DTO
 {
-    public class CustomerProfileDTO
+    public class CustomerShowProfileDTO
     {
         public int DealId { get; set; }
         public string CustomerName { get; set; }

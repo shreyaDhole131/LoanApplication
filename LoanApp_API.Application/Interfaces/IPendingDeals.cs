@@ -9,7 +9,7 @@ namespace LoanApp_API.Application.Interfaces
     {
         Task<List<PendingDealsDTO>> fetchPendingDeals();
 
-        Task<CustomerProfileDTO?> fetchCustomerProfile(int dealId);
+        Task<CustomerShowProfileDTO?> fetchCustomerProfile(int dealId);
 
         Task<List<PendingDealsDTO>> sortPendingDeals(string? LoanType,decimal? MinAmount,decimal? MaxAmount,string? dateFilter, DateOnly? FromFilter,
             DateOnly? ToFilter);

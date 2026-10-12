@@ -17,9 +17,9 @@ namespace LoanApp_API.Infrastructure.Repositories
             this.db = db;
         }
 
-        public async Task<CustomerProfileDTO?> fetchCustomerProfile(int dealId)
+        public async Task<CustomerShowProfileDTO?> fetchCustomerProfile(int dealId)
         {
-            return await db.LoanDeals.Include(ld => ld.customers).Where(ld => ld.DealId == dealId).Select(ld => new CustomerProfileDTO
+            return await db.LoanDeals.Include(ld => ld.customers).Where(ld => ld.DealId == dealId).Select(ld => new CustomerShowProfileDTO
             {
                 DealId = ld.DealId,
                 CustomerName = ld.customers.FirstName + " " + ld.customers.LastName,
