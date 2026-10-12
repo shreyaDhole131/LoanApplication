@@ -13,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 using System.Threading.RateLimiting;
+using LoanApp_API.Application.Mapper;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IForeClosureRepository, ForeClosureRepository>();
@@ -27,6 +29,17 @@ builder.Services.AddScoped<IOfficerCustomerProfileRepository,OfficerCustomerProf
 builder.Services.AddScoped<IOfficerKycRepository, OfficerKycRepository>();
 builder.Services.AddScoped<IOfficerSupportTicketRepository,OfficerSupportTicketRepository>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ILoanAccountService, LoanAccountService>();
+builder.Services.AddScoped<IEmiScheduleService, EmiScheduleService>();
+
+builder.Services.AddScoped<ILoanDeals, LoanDealsService>();
+
+builder.Services.AddScoped<ISanctionLetter, SanctionLetterService>();
+
+builder.Services.AddScoped<IDisbursement, DisbursementService>();
+
+builder.Services.AddScoped<IPendingDeals, PendingDealsService>();
 
 
 
@@ -70,6 +83,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -103,9 +117,13 @@ builder.Services.AddHangfireServer();
 
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingData));
 
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ILoanAccountService, LoanAccountService  >();
-builder.Services.AddScoped<IEmiScheduleService, EmiScheduleService>();
+
+
+
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"];
+}, typeof(MappingData).Assembly);
 
 var app = builder.Build();
 
@@ -124,7 +142,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseMiddleware<ExceptionMiddleware>();
+//app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseRateLimiter();
 

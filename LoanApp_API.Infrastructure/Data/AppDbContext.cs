@@ -142,8 +142,8 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<CibilReport>()
             .HasOne(x => x.Customer)
-            .WithMany()
-            .HasForeignKey(x => x.CustomerId)
+            .WithOne(x => x.cibilReport)
+            .HasForeignKey<CibilReport>(x => x.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<ScoreCard>()

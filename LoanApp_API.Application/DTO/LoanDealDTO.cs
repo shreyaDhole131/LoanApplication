@@ -6,6 +6,7 @@ namespace LoanApp_API.Application.DTO
 {
     public class LoanDealDTO
     {
+
         public string LoanType { get; set; }
 
         public decimal LoanAmount { get; set; }
