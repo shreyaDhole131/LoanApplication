@@ -17,13 +17,30 @@ namespace LoanApp_API.Infrastructure.Repositories
             this.db = db;
         }
 
-        public async Task<List<ScoreCardDTO>> fetchScoreCardReport()
+        public async Task<List<ScoreCardDTO>> fetchScoreCardReport(DateOnly? fromDate, DateOnly? toDate)
         {
-            var scoreRows = await db.ScoreCards.Select(s => new { s.CustomerId, s.RiskCategory }).ToListAsync();
-            var customerIds = scoreRows.Select(s => s.CustomerId).ToList();
 
-            var loanRows = await db.LoanDeals.Where(ld => customerIds.Contains(ld.CustomerId)).Select(ld => new { ld.CustomerId, ld.CurrentStatus }).ToListAsync();
+            var loanquery = db.LoanDeals.AsQueryable();
 
+            if (fromDate.HasValue)
+            {
+                var from = fromDate.Value.ToDateTime(TimeOnly.MinValue);
+                loanquery = loanquery.Where(ld => ld.AppliedDate >= from);
+            }
+
+            if (toDate.HasValue)
+            {
+                var to = toDate.Value.ToDateTime(TimeOnly.MinValue).AddDays(1);
+                loanquery = loanquery.Where(ld => ld.AppliedDate < to);
+            }
+
+            var loanRows = await loanquery.Select(ld => new { ld.CustomerId, ld.CurrentStatus }).ToListAsync();
+
+            var customerIds = loanRows.Select(l => l.CustomerId).Distinct().ToList();
+
+
+            var scoreRows = await db.ScoreCards.Where(s => customerIds.Contains(s.CustomerId))
+                .Select(s => new { s.CustomerId, s.RiskCategory }).ToListAsync();
 
             var approvedSet = loanRows.Where(l => l.CurrentStatus == "Approved").Select(l => l.CustomerId).ToHashSet();
             var rejectedSet = loanRows.Where(l => l.CurrentStatus == "Rejected").Select(l => l.CustomerId).ToHashSet();
@@ -41,7 +58,7 @@ namespace LoanApp_API.Infrastructure.Repositories
 
             var result = new List<ScoreCardDTO>();
 
-            foreach(var category in categoryOrder)
+            foreach (var category in categoryOrder)
             {
                 var customersInCategroy = scoreRows.Where(s => s.RiskCategory == category).Select(s => s.CustomerId).Distinct().ToList();
 
@@ -50,7 +67,7 @@ namespace LoanApp_API.Infrastructure.Repositories
                 int rejected = customersInCategroy.Count(id => rejectedSet.Contains(id));
                 int pending = customersInCategroy.Count(id => pendingSet.Contains(id));
 
-                decimal percent = applicants == 0 ? 0 : Math.Round((decimal) approved / applicants * 100,2);
+                decimal percent = applicants == 0 ? 0 : Math.Round((decimal)approved / applicants * 100, 2);
                 result.Add(new ScoreCardDTO
                 {
                     ScoreCard = category,

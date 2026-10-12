@@ -17,9 +17,23 @@ namespace LoanApp_API.Infrastructure.Repositories
             this.db = db;
         }
 
-        public async Task<List<CibiReportDTO>> fetchCibilReport()
+        public async Task<List<CibiReportDTO>> fetchCibilReport(DateOnly? fromDate, DateOnly? toDate)
         {
-            var cibilRows = await db.CibilReports.Select(c => new { c.CustomerId, c.CibilScore }).ToListAsync();
+            var cibilQuery = db.CibilReports.AsQueryable();
+
+            if (fromDate.HasValue)
+            {
+                var from = fromDate.Value.ToDateTime(TimeOnly.MinValue);
+                cibilQuery = cibilQuery.Where(c => c.CheckDate >= from);
+            }
+
+            if (toDate.HasValue)
+            { 
+                var to = toDate.Value.ToDateTime(TimeOnly.MinValue).AddDays(1);
+                cibilQuery = cibilQuery.Where(c => c.CheckDate < to);
+            }
+
+            var cibilRows = await cibilQuery.Select(c => new { c.CustomerId, c.CibilScore }).ToListAsync();
 
             var customerIds = cibilRows.Select(c => c.CustomerId).ToList();
 
@@ -28,7 +42,7 @@ namespace LoanApp_API.Infrastructure.Repositories
 
             var approvedSet = approvedIds.ToHashSet();
 
-            var ranges = new(string label,int Min,int Max)[]
+            var ranges = new (string label, int Min, int Max)[]
             {
                 ("800-899",800,899),
                 ("750-799",750,799),
@@ -38,18 +52,21 @@ namespace LoanApp_API.Infrastructure.Repositories
 
             var result = new List<CibiReportDTO>();
 
-            foreach(var range in ranges)
+            foreach (var range in ranges) 
             {
-                var customersInRange = cibilRows.Where(c => c.CibilScore >= range.Min && c.CibilScore <= range.Max).Select(c => c.CustomerId).Distinct().ToList();
+                var customersInRange = cibilRows.Where(c => c.CibilScore >= range.Min && c.CibilScore <= range.Max)
+                    .Select(c => c.CustomerId)
+                    .Distinct()
+                    .ToList();
 
                 int applicants = customersInRange.Count;
                 int approved = customersInRange.Count(id => approvedSet.Contains(id));
 
-                decimal percent = applicants == 0 ? 0 : Math.Round((decimal)approved / applicants * 100,2);
+                decimal percent = applicants == 0 ? 0 : Math.Round((decimal)approved / applicants);
 
                 result.Add(new CibiReportDTO
                 {
-                    CibilScoreRange= range.label,
+                    CibilScoreRange = range.label,
                     Applicants = applicants,
                     Approved = approved,
                     Approval = percent
@@ -58,7 +75,8 @@ namespace LoanApp_API.Infrastructure.Repositories
 
             int totalApplicants = result.Sum(r => r.Applicants);
             int totalApproved = result.Sum(r => r.Approved);
-            decimal totalApproval = totalApplicants == 0 ? 0 : Math.Round((decimal)totalApproved / totalApplicants * 100);
+            decimal totalApproval = totalApplicants == 0 ? 0 : Math.Round((decimal)totalApproved / totalApplicants,2);
+
 
             result.Add(new CibiReportDTO
             {
@@ -70,6 +88,9 @@ namespace LoanApp_API.Infrastructure.Repositories
 
 
             return result;
+
+
+
 
         }
     }

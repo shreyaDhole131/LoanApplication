@@ -16,16 +16,31 @@ namespace LoanApp_API.Infrastructure.Repositories
             this.db = db;
         }
 
-        public async Task<List<ProductReportDTO>> fetchProductReport()
+        public async Task<List<ProductReportDTO>> fetchProductReport(DateOnly? fromDate, DateOnly? toDate)
         {
 
-            var deals = await db.LoanDeals.Select(ld => new
+            var query = db.LoanDeals.AsQueryable();
+
+            if (fromDate.HasValue)
+            {
+                var from = fromDate.Value.ToDateTime(TimeOnly.MinValue);
+                query = query.Where(ld => ld.AppliedDate >= from);
+            }
+
+            if (toDate.HasValue)
+            {
+                var to = toDate.Value.ToDateTime(TimeOnly.MinValue).AddDays(1);
+                query = query.Where(ld => ld.AppliedDate < to);
+            }
+
+            var deals = await query.Select(ld => new
             {
                 ld.DealId,
                 ld.LoanType,
                 ld.CurrentStatus,
                 IsDisbursed = ld.disbursement != null
             }).ToListAsync();
+
 
             var productOrder = new[]
             {
@@ -34,9 +49,10 @@ namespace LoanApp_API.Infrastructure.Repositories
                 "Personal Loan"
             };
 
+
             var result = new List<ProductReportDTO>();
 
-            foreach(var product in productOrder)
+            foreach (var product in productOrder)
             {
                 var dealsInProduct = deals.Where(d => d.LoanType == product).ToList();
                 int applicants = dealsInProduct.Count();
@@ -59,9 +75,10 @@ namespace LoanApp_API.Infrastructure.Repositories
             int totalApproved = result.Sum(r => r.Approved);
             int totalDisbursed = result.Sum(r => r.Disbursed);
 
-            decimal totalPrecent = totalApplicants == 0 ? 0 : Math.Round((decimal) totalDisbursed / totalApplicants * 100, 2);
+            decimal totalPrecent = totalApplicants == 0 ? 0 : Math.Round((decimal)totalDisbursed / totalApplicants * 100, 2);
 
-            result.Add(new ProductReportDTO {
+            result.Add(new ProductReportDTO
+            {
                 Product = "Total",
                 Applicants = totalApplicants,
                 Approved = totalApproved,

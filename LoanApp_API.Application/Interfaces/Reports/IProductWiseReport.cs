@@ -7,6 +7,6 @@ namespace LoanApp_API.Application.Interfaces.Reports
 {
     public interface IProductWiseReport
     {
-        Task<List<ProductReportDTO>> fetchProductReport();
+        Task<List<ProductReportDTO>> fetchProductReport(DateOnly? fromDate, DateOnly? toDate);
     }
 }

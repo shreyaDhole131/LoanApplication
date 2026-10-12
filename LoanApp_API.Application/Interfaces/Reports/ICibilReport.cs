@@ -7,7 +7,7 @@ namespace LoanApp_API.Application.Interfaces.Reports
 {
     public interface ICibilReport
     {
-        Task<List<CibiReportDTO>> fetchCibilReport();
+        Task<List<CibiReportDTO>> fetchCibilReport(DateOnly? fromDate, DateOnly? toDate);
 
     }
 }

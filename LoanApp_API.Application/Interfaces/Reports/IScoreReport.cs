@@ -7,6 +7,6 @@ namespace LoanApp_API.Application.Interfaces.Reports
 {
     public interface IScoreReport
     {
-        Task<List<ScoreCardDTO>> fetchScoreCardReport();
+        Task<List<ScoreCardDTO>> fetchScoreCardReport(DateOnly? fromDate, DateOnly? toDate);
     }
 }
