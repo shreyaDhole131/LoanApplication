@@ -14,6 +14,6 @@ namespace LoanApp_API.Application.Interfaces
         Task<List<PendingDealsDTO>> sortPendingDeals(string? LoanType,decimal? MinAmount,decimal? MaxAmount,string? dateFilter, DateOnly? FromFilter,
             DateOnly? ToFilter);
 
-        Task reviewDeal(int dealId,string status);
+        Task reviewDeal(int dealId, string status, int officerId);
     }
 }

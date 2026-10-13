@@ -23,12 +23,18 @@ namespace LoanApp_API.Infrastructure.Repositories
 
         }
 
-        public async Task applyLoan(LoanDealDTO dto, int customerId)
+        public async Task applyLoan(LoanDealDTO dto, int userId)
         {
+            var customerId = await db.Users.Where(u => u.UserId == userId)
+                .Select(u => u.CustomerId).FirstOrDefaultAsync();
+
+            if (customerId == null)
+                throw new UnauthorizedAccessException("User is not a customer");
 
             var deals = mapper.Map<LoanDeals>(dto);
-            deals.CustomerId = customerId;
+
             deals.CurrentStatus = "Pending";
+            deals.CustomerId = customerId.Value;
             deals.AppliedDate = DateTime.UtcNow;
             deals.ApprovedAmount = 0;
             await db.LoanDeals.AddAsync(deals);

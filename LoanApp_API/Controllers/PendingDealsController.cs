@@ -1,6 +1,8 @@
 ﻿using LoanApp_API.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LoanApp_API.Controllers
 {
@@ -40,13 +42,16 @@ namespace LoanApp_API.Controllers
             return Ok(data);
         }
 
+        [Authorize(Roles = "2")]
         [HttpPost("{dealId}/Review")]
         public async Task<IActionResult> ReviewDeal(int dealId,string status)
         {
             if (status != "Approved" && status != "Rejected")
                 return BadRequest(new { message = "Status must be rejected or approved" });
 
-            await service.reviewDeal(dealId, status);
+            var officerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            await service.reviewDeal(dealId, status,officerId);
             return Ok(new { message = $"Deal {status.ToLower()}." });
         }
     }

@@ -3,6 +3,7 @@ using LoanApp_API.Application.Interfaces;
 using LoanApp_API.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LoanApp_API.Controllers
 {
@@ -21,8 +22,8 @@ namespace LoanApp_API.Controllers
         [Route("AddLoan")]
         public async Task<IActionResult> AddLoan([FromBody] LoanDealDTO dto)
         {
-            var customerId = 1;
-            await service.applyLoan(dto, customerId);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            await service.applyLoan(dto, userId);
             return Ok(new { message = "loan added successfully" });
         }
     }

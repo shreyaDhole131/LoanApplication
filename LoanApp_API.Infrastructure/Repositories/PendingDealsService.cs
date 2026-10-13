@@ -1,5 +1,6 @@
 ﻿using LoanApp_API.Application.DTO;
 using LoanApp_API.Application.Interfaces;
+using LoanApp_API.Domain.Entities;
 using LoanApp_API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -48,11 +49,23 @@ namespace LoanApp_API.Infrastructure.Repositories
             }).ToListAsync();
         }
 
-        public async Task reviewDeal(int dealId, string status)
+        public async Task reviewDeal(int dealId, string status,int officerId)
         {
             var deal = await db.LoanDeals.FirstOrDefaultAsync(d => d.DealId == dealId);
             if (deal == null) throw new InvalidOperationException($"Deal {dealId} not found");
+            if (deal.CurrentStatus != "Pending") throw new InvalidOperationException($"Deal is already " +
+                $"{deal.CurrentStatus}");
+
+            await db.DealReviews.AddAsync(new DealReviews
+            {
+                DealId = dealId,
+                OfficerId= officerId,
+                Status = status
+
+
+            });
             deal.CurrentStatus = status;
+            if (status == "Rejected") deal.ApprovedAmount = 0;
             await db.SaveChangesAsync();
 
         }
