@@ -24,17 +24,20 @@ namespace LoanApp_API.Middleware
             }
         }
 
+
         private async Task HandleExceptionAsync(
             HttpContext context,
             Exception ex)
         {
+            Console.WriteLine(ex.ToString());
+
             context.Response.StatusCode = 500;
             context.Response.ContentType = "application/json";
 
             var response = new ApiResponse<object>
             {
                 Success = false,
-                Message = "Something went wrong.",
+                Message = ex.Message,
                 Data = null
             };
 
@@ -42,5 +45,6 @@ namespace LoanApp_API.Middleware
 
             await context.Response.WriteAsync(json);
         }
+
     }
 }
