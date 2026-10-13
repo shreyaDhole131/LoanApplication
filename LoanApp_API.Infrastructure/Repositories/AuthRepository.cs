@@ -15,20 +15,17 @@ namespace LoanApp_API.Infrastructure.Repositories
 
         public User? GetUserByEmail(string email)
         {
-            return _db.Users
-                .FirstOrDefault(x => x.Email == email);
+            return _db.Users.FirstOrDefault(x => x.Email == email);
         }
 
         public Customers? GetCustomerByEmail(string email)
         {
-            return _db.Customers
-                .FirstOrDefault(x => x.Email == email);
+            return _db.Customers.FirstOrDefault(x => x.Email == email);
         }
 
         public User CreateUser(User user)
         {
-            user.Password =
-                BCrypt.Net.BCrypt.HashPassword(user.Password);
+            user.Password =BCrypt.Net.BCrypt.HashPassword(user.Password);
 
             _db.Users.Add(user);
             _db.SaveChanges();
@@ -38,8 +35,7 @@ namespace LoanApp_API.Infrastructure.Repositories
 
         public Customers CreateCustomer(Customers customer)
         {
-            customer.Password =
-                BCrypt.Net.BCrypt.HashPassword(customer.Password);
+            customer.Password =BCrypt.Net.BCrypt.HashPassword(customer.Password);
 
             _db.Customers.Add(customer);
             _db.SaveChanges();
@@ -63,17 +59,12 @@ namespace LoanApp_API.Infrastructure.Repositories
 
         public User? Login(string email, string password)
         {
-            var user = _db.Users
-                .FirstOrDefault(x => x.Email == email);
+            var user = _db.Users.FirstOrDefault(x => x.Email == email);
 
             if (user == null)
                 return null;
 
-            bool isPasswordValid =
-                BCrypt.Net.BCrypt.Verify(
-                    password,
-                    user.Password
-                );
+            bool isPasswordValid =BCrypt.Net.BCrypt.Verify(password,user.Password );
 
             if (!isPasswordValid)
                 return null;
@@ -83,8 +74,7 @@ namespace LoanApp_API.Infrastructure.Repositories
 
         public bool VerifyEmailOtp(string email, string otp)
         {
-            var customer = _db.Customers
-                .FirstOrDefault(x => x.Email == email);
+            var customer = _db.Customers.FirstOrDefault(x => x.Email == email);
 
             if (customer == null)
                 return false;
@@ -134,8 +124,7 @@ namespace LoanApp_API.Infrastructure.Repositories
 
         public User CreateOfficer(User user)
         {
-            user.Password =
-                BCrypt.Net.BCrypt.HashPassword(user.Password);
+            user.Password =BCrypt.Net.BCrypt.HashPassword(user.Password);
 
             user.RoleId = 2;
             user.CustomerId = null;
