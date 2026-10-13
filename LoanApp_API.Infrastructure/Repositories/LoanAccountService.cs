@@ -68,11 +68,10 @@ namespace LoanApp_API.Infrastructure.Repositories
             await db.SaveChangesAsync();
 
             backgroundJobClient.Enqueue<IEmiScheduleService>(
-        service => service.GenerateEMISchedule(
+            service => service.GenerateEMISchedule(
             loanAccount.LoanAccountId
         ));
         }
-
 
 
 
