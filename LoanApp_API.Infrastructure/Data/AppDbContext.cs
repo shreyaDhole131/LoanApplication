@@ -1,4 +1,3 @@
-
 using LoanApp_API.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +11,7 @@ public class AppDbContext : DbContext
     }
 
 
-        
+
 
     public DbSet<LoanPayment> LoanPayment { get; set; } = null!;
 
@@ -36,6 +35,7 @@ public class AppDbContext : DbContext
     public DbSet<CibilReport> CibilReports { get; set; } = null!;
     public DbSet<ScoreCard> ScoreCards { get; set; } = null!;
     public DbSet<EligibilityResult> EligibilityResults { get; set; } = null!;
+    public DbSet<EligibilityTenureResult> EligibilityTenureResults { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -57,6 +57,7 @@ public class AppDbContext : DbContext
             // One account  have many foreclosure requests
             entity.Property(x => x.PartialAmount)
                 .HasColumnType("decimal(18,2)");
+
 
             entity.HasOne(x => x.LoanAccount)
                 .WithMany()
@@ -139,8 +140,8 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<CibilReport>()
             .HasOne(x => x.Customer)
-            .WithMany()
-            .HasForeignKey(x => x.CustomerId)
+            .WithOne(x => x.cibilReport)
+            .HasForeignKey<CibilReport>(x => x.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<ScoreCard>()
@@ -154,5 +155,37 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(x => x.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<EligibilityTenureResult>()
+            .HasOne(x => x.EligibilityResult)
+            .WithMany()
+            .HasForeignKey(x => x.EligibilityId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+
+        modelBuilder.Entity<EligibilityResult>()
+            .Property(x => x.LoanAmount)
+            .HasPrecision(18, 2);
+
+        modelBuilder.Entity<EligibilityTenureResult>()
+            .Property(x => x.InterestRate)
+            .HasPrecision(5, 2);
+
+        modelBuilder.Entity<EligibilityTenureResult>()
+            .Property(x => x.ExistingMonthlyEmi)
+            .HasPrecision(18, 2);
+
+        modelBuilder.Entity<EligibilityTenureResult>()
+            .Property(x => x.MaxAllowableEmi)
+            .HasPrecision(18, 2);
+
+        modelBuilder.Entity<EligibilityTenureResult>()
+            .Property(x => x.AvailableEmi)
+            .HasPrecision(18, 2);
+
+        modelBuilder.Entity<EligibilityTenureResult>()
+            .Property(x => x.EligibleLoanAmount)
+            .HasPrecision(18, 2);
+
     }
 }

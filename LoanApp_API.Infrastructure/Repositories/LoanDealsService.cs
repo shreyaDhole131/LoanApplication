@@ -23,9 +23,14 @@ namespace LoanApp_API.Infrastructure.Repositories
 
         }
 
-        public async Task applyLoan(LoanDealDTO dto)
+        public async Task applyLoan(LoanDealDTO dto, int customerId)
         {
+
             var deals = mapper.Map<LoanDeals>(dto);
+            deals.CustomerId = customerId;
+            deals.CurrentStatus = "Pending";
+            deals.AppliedDate = DateTime.UtcNow;
+            deals.ApprovedAmount = 0;
             await db.LoanDeals.AddAsync(deals);
             await db.SaveChangesAsync();
 

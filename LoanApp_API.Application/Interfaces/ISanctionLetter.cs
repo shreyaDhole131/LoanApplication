@@ -13,7 +13,7 @@ namespace LoanApp_API.Application.Interfaces
 
         Task AddSanctionLetter(CreateSanctionDTO dto);
 
-        Task<List<SanctionGridDTO>> fetchSanctionGrids();
+        //Task<List<SanctionGridDTO>> fetchSanctionGrids();
 
         Task<List<SanctionGridDTO>> fetchSanctionsGrid(string? name, string? FromDate, string? ToDate, string? Filter, string? sort);
     }
