@@ -23,5 +23,8 @@ namespace LoanApp_API.Application.DTO
 
 
         public DateTime AppliedDate { get; set; }
+
+        public string DisbursementStatus { get; set; }     
+        public bool IsDisbursed { get; set; }
     }
 }
