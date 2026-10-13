@@ -7,6 +7,7 @@ namespace LoanApp_API.Application.Interfaces.Reports
 {
     public interface ILoanProtfolio
     {
-        Task<List<LoanProtfolioDTO>> fetchLoanProtofolio();
+        Task<List<LoanProtfolioDTO>> fetchLoanProtofolio(DateOnly? fromDate ,
+    DateOnly? toDate );
     }
 }
