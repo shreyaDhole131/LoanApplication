@@ -13,10 +13,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 using System.Threading.RateLimiting;
-using LoanApp_API.Application.Mapper;
-using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Repository and service registrations
 builder.Services.AddScoped<IForeClosureRepository, ForeClosureRepository>();
 builder.Services.AddScoped<IPaymentHistoryRepository, PaymentHistoryRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
@@ -25,28 +25,29 @@ builder.Services.AddScoped<ICustomerProfileRepository, CustomerProfileRepository
 builder.Services.AddScoped<IKycRepository, KycRepository>();
 builder.Services.AddScoped<ICustomerDashboardRepository, CustomerDashboardRepository>();
 builder.Services.AddScoped<IOfficerDashboardRepository, OfficerDashboardRepository>();
-builder.Services.AddScoped<IOfficerCustomerProfileRepository,OfficerCustomerProfileRepository>();
+builder.Services.AddScoped<IOfficerCustomerProfileRepository, OfficerCustomerProfileRepository>();
 builder.Services.AddScoped<IOfficerKycRepository, OfficerKycRepository>();
-builder.Services.AddScoped<IOfficerSupportTicketRepository,OfficerSupportTicketRepository>();
+builder.Services.AddScoped<IOfficerSupportTicketRepository, OfficerSupportTicketRepository>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ILoanAccountService, LoanAccountService>();
 builder.Services.AddScoped<IEmiScheduleService, EmiScheduleService>();
 
 builder.Services.AddScoped<ILoanDeals, LoanDealsService>();
-
 builder.Services.AddScoped<ISanctionLetter, SanctionLetterService>();
-
 builder.Services.AddScoped<IDisbursement, DisbursementService>();
-
 builder.Services.AddScoped<IPendingDeals, PendingDealsService>();
 
+// CIBIL, ScoreCard and Eligibility services
+builder.Services.AddScoped<ICibilService, CibilService>();
+builder.Services.AddScoped<IScoreCardService, ScoreCardService>();
+builder.Services.AddScoped<IEligibilityService, EligibilityService>();
 
-
+// Controllers and memory cache
 builder.Services.AddControllers();
-
 builder.Services.AddMemoryCache();
 
+// Rate limiting
 builder.Services.AddRateLimiter(options =>
 {
     options.AddFixedWindowLimiter("fixed", limiterOptions =>
@@ -57,11 +58,13 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
+// Database connection
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("dbconn")
     ));
 
+// JWT authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -83,9 +86,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
 builder.Services.AddAuthorization();
 
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
@@ -107,7 +110,7 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 
-
+// Hangfire background jobs
 builder.Services.AddHangfire(config =>
     config.UseSqlServerStorage(
         builder.Configuration.GetConnectionString("dbconn")
@@ -115,16 +118,13 @@ builder.Services.AddHangfire(config =>
 
 builder.Services.AddHangfireServer();
 
-builder.Services.AddAutoMapper(cfg => { }, typeof(MappingData));
-
-
-
-
+// AutoMapper
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"];
 }, typeof(MappingData).Assembly);
 
+// Build application
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -138,11 +138,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
-
 app.UseHttpsRedirection();
 
-//app.UseMiddleware<ExceptionMiddleware>();
+// Uncomment if you want to enable the exception middleware
+// app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseRateLimiter();
 
@@ -150,6 +149,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Hangfire dashboard
 app.UseHangfireDashboard("/hangfire");
 
 app.Run();

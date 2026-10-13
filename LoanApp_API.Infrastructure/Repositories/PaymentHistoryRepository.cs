@@ -1,7 +1,4 @@
-﻿using global::LoanApp_API.Application.DTO.ForeClosure;
-using global::LoanApp_API.Application.DTO.PaymentHistory;
-using global::LoanApp_API.Application.Interfaces;
-using global::LoanApp_API.Infrastructure.Data;
+﻿
 using LoanApp_API.Application.DTO.ForeClosure;
 using LoanApp_API.Application.DTO.PaymentHistory;
 using LoanApp_API.Application.Interfaces;
@@ -20,7 +17,7 @@ namespace LoanApp_API.Infrastructure.Repositories
             _db = db;
         }
 
-        // Dropdown: all loans of this customer (Active and Closed)
+        //all loans of this customer (Active and Closed)
         public async Task<List<CustomerLoanDto>> GetCustomerLoans(int customerId)
         {
             return await _db.LoanAccounts

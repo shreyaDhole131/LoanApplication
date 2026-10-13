@@ -19,26 +19,19 @@ namespace LoanApp_API.Controllers
         private readonly IEmailSender _emailSender;
         private readonly IConfiguration _configuration;
 
-        public AuthController(
-            IAuthRepository repo,
-            IEmailSender emailSender,
-            IConfiguration configuration)
+        public AuthController(IAuthRepository repo,IEmailSender emailSender,IConfiguration configuration)
         {
             _repo = repo;
             _emailSender = emailSender;
             _configuration = configuration;
         }
 
-        // CUSTOMER REGISTRATION
         [HttpPost("register")]
-        public async Task<IActionResult> Register(
-            CustomerRegistrationDTO model)
+        public async Task<IActionResult> Register(CustomerRegistrationDTO model)
         {
-            var existingUser =
-                _repo.GetUserByEmail(model.Email);
+            var existingUser =_repo.GetUserByEmail(model.Email);
 
-            var existingCustomer =
-                _repo.GetCustomerByEmail(model.Email);
+            var existingCustomer =_repo.GetCustomerByEmail(model.Email);
 
             if (existingUser != null || existingCustomer != null)
             {
@@ -112,7 +105,6 @@ namespace LoanApp_API.Controllers
             });
         }
 
-        // VERIFY EMAIL OTP
         [HttpPost("verify-otp")]
         public IActionResult VerifyOtp(
             VerifyOtpDTO model)
@@ -152,8 +144,7 @@ namespace LoanApp_API.Controllers
                 });
             }
 
-            if (customer.OtpExpiry == null ||
-                DateTime.UtcNow > customer.OtpExpiry)
+            if (customer.OtpExpiry == null ||DateTime.UtcNow > customer.OtpExpiry)
             {
                 return BadRequest(new
                 {
@@ -170,10 +161,7 @@ namespace LoanApp_API.Controllers
             }
 
             bool verified =
-                _repo.VerifyEmailOtp(
-                    model.Email,
-                    model.Otp
-                );
+                _repo.VerifyEmailOtp(model.Email,model.Otp);
 
             if (!verified)
             {
@@ -189,7 +177,6 @@ namespace LoanApp_API.Controllers
             });
         }
 
-        // LOGIN
         [HttpPost("login")]
         public IActionResult Login(LoginDTO model)
         {
@@ -223,7 +210,6 @@ namespace LoanApp_API.Controllers
             return CreateJwtResponse(user);
         }
 
-        // GOOGLE LOGIN
         [HttpPost("google")]
         public async Task<IActionResult> GoogleLogin(
             GoogleLoginDTO model)
@@ -369,7 +355,6 @@ namespace LoanApp_API.Controllers
             return CreateJwtResponse(user);
         }
 
-        // CREATE OFFICER
         [HttpPost("create-officer")]
         public IActionResult CreateOfficer()
         {
@@ -394,7 +379,6 @@ namespace LoanApp_API.Controllers
             });
         }
 
-        // JWT GENERATION
         private IActionResult CreateJwtResponse(
             User user)
         {

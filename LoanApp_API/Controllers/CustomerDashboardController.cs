@@ -12,8 +12,7 @@ namespace LoanApp_API.Controllers
     {
         private readonly ICustomerDashboardRepository _repo;
 
-        public CustomerDashboardController(
-            ICustomerDashboardRepository repo)
+        public CustomerDashboardController(ICustomerDashboardRepository repo)
         {
             _repo = repo;
         }
@@ -21,16 +20,14 @@ namespace LoanApp_API.Controllers
         [HttpGet]
         public IActionResult GetDashboard()
         {
-            var userIdClaim =
-                User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim =User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (userIdClaim == null)
                 return Unauthorized();
 
             int userId = int.Parse(userIdClaim);
 
-            var dashboard =
-                _repo.GetCustomerDashboard(userId);
+            var dashboard =_repo.GetCustomerDashboard(userId);
 
             if (dashboard == null)
             {

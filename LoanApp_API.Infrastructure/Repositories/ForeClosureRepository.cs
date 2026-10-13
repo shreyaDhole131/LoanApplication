@@ -16,9 +16,9 @@ namespace LoanApp_API.Infrastructure.Repositories
             _db = db;
         }
 
-        // =====================  CUSTOMER SIDE  =====================
+        //for customer
 
-        // Dropdown: only Active loans of this customer
+        //only Active loans of this customer
         public async Task<List<CustomerLoanDto>> GetCustomerLoans(int customerId)
         {
             return await _db.LoanAccounts
@@ -36,7 +36,6 @@ namespace LoanApp_API.Infrastructure.Repositories
         {
             var loan = await _db.LoanAccounts.FindAsync(loanAccountId);
             if (loan == null) return null;
-
             var nextEmi = await GetNextPendingEmi(loanAccountId);
 
             return new ForeClosureSummaryDto
@@ -117,7 +116,7 @@ namespace LoanApp_API.Infrastructure.Repositories
             return (true, "Foreclosure request submitted");
         }
 
-        // "My Foreclosure Requests" table
+        //  Foreclosure Requests - customer side
         public async Task<List<CustomerForeClosureDto>> GetMyRequests(int customerId)
         {
             return await _db.ForeClosureRequests
@@ -134,7 +133,7 @@ namespace LoanApp_API.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        // =====================  OFFICER SIDE  =====================
+        //Officer Side
 
         // Dashboard table
         public async Task<List<OfficerForeClosureDto>> GetAllRequests()
@@ -144,7 +143,7 @@ namespace LoanApp_API.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        // View page
+        //View page
         public async Task<OfficerForeClosureDto?> GetRequestById(int id)
         {
             return await OfficerQuery()
@@ -155,8 +154,7 @@ namespace LoanApp_API.Infrastructure.Repositories
 
         public Task<(bool Success, string Message)> Reject(int id) => ChangeStatus(id, "Rejected");
 
-        // =====================  SMALL HELPERS (used more than once)  =====================
-
+     
         private async Task<EmiSchedule?> GetNextPendingEmi(int loanAccountId)
         {
             return await _db.EmiSchedules

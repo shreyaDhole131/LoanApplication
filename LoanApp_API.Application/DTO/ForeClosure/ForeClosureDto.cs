@@ -40,7 +40,7 @@ namespace LoanApp_API.Application.DTO.ForeClosure
         public string Status { get; set; } = "";
     }
 
-    // ===== OFFICER SIDE =====
+    // --Officer side DTO
     // ONE dto used for both the dashboard table and the View page
     public class OfficerForeClosureDto
     {
