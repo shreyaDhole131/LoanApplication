@@ -8,7 +8,7 @@ namespace LoanApp_API.Application.Interfaces
 {
     public interface ILoanDeals
     {
-        Task applyLoan(LoanDealDTO dto, int customerId);
+        Task<LoanDeals> applyLoan(LoanDealDTO dto, int userId);
 
 
     }
