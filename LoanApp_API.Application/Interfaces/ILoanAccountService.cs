@@ -12,5 +12,7 @@ namespace LoanApp_API.Application.Interfaces
         Task CreateLoanAccount(int disbursementId);
         Task<List<LoanAccountDto>> FetchAllLoanAccounts();
 
+        Task<List<LoanAccountDto>> FetchLoanAccountById(int customerId);
+
     }
 }

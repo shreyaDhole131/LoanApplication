@@ -1,5 +1,6 @@
 ﻿using LoanApp_API.Application.Interfaces;
 using LoanApp_API.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,6 +55,30 @@ namespace LoanApp_API.Controllers
                     message = ex.Message
                 });
             }
+        }
+
+        [Authorize]
+        [HttpGet("my-loans")]
+        public async Task<IActionResult> GetMyLoanAccounts()
+        {
+            var customerIdClaim = User.FindFirst("CustomerId")?.Value;
+
+            if (string.IsNullOrEmpty(customerIdClaim))
+            {
+                return Unauthorized("CustomerId not found in token.");
+            }
+
+            int customerId = int.Parse(customerIdClaim);
+
+            var loanAccounts =
+                await service.FetchLoanAccountById(customerId);
+
+            if (loanAccounts == null || loanAccounts.Count == 0)
+            {
+                return NotFound("No loan accounts found.");
+            }
+
+            return Ok(loanAccounts);
         }
     }
 }
