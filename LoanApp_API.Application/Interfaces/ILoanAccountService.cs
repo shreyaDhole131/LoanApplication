@@ -8,9 +8,10 @@ namespace LoanApp_API.Application.Interfaces
 {
     public interface ILoanAccountService
     {
-
         Task CreateLoanAccount(int disbursementId);
         Task<List<LoanAccountDto>> FetchAllLoanAccounts();
+
+        Task<List<LoanAccountDto>> FetchLoanAccountById(int customerId);
 
     }
 }

@@ -68,11 +68,10 @@ namespace LoanApp_API.Infrastructure.Repositories
             await db.SaveChangesAsync();
 
             backgroundJobClient.Enqueue<IEmiScheduleService>(
-        service => service.GenerateEMISchedule(
+            service => service.GenerateEMISchedule(
             loanAccount.LoanAccountId
         ));
         }
-
 
 
 
@@ -82,6 +81,15 @@ namespace LoanApp_API.Infrastructure.Repositories
                 .Include(x => x.Customer)
                 .ToListAsync();
 
+            return mapper.Map<List<LoanAccountDto>>(loanAccounts);
+        }
+
+        public async Task<List<LoanAccountDto>> FetchLoanAccountById(int customerId)
+        {
+            var loanAccounts = await db.LoanAccounts
+                .Where(x => x.CustomerId == customerId)
+                .Include(x => x.Customer)
+                .ToListAsync();
             return mapper.Map<List<LoanAccountDto>>(loanAccounts);
         }
     }
