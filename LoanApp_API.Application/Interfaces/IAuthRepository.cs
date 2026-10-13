@@ -19,5 +19,5 @@ namespace LoanApp_API.Application.Interfaces
         bool VerifyEmailOtp(string email, string otp);
 
         bool MarkEmailVerified(string email);
-    }
+    } 
 }
