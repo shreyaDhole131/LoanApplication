@@ -19,5 +19,8 @@ namespace LoanApp_API.Application.Interfaces
         Task<List<SanctionGridDTO>> fetchSanctionsGrid(string? name, string? FromDate, string? ToDate, string? Filter, string? sort);
 
         Task<SanctionLetterDTO?> GetSanctionLetter(int letterId);
+
+        byte[] GenerateSanctionLetterPdf(SanctionLetterDTO letter);
+
     }
 }
