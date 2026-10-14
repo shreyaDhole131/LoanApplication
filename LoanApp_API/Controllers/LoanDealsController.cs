@@ -35,5 +35,20 @@ namespace LoanApp_API.Controllers
 
             }
         }
+
+        [Authorize]
+        [HttpPost("Preview")]
+        public IActionResult Preview([FromBody] LoanPreviewRequestDTO dto)
+        {
+            try
+            {
+                var result = service.CalculatePreview(dto.LoanAmount, dto.TenureMonths);
+                return Ok( result );
+            }
+            catch (InvalidOperationException ex) {
+                return BadRequest(new { ex.Message });
+            
+            }
+        }
     }
 }

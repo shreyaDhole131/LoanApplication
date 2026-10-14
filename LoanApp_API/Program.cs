@@ -125,6 +125,7 @@ builder.Services.AddAutoMapper(cfg =>
 }, typeof(MappingData).Assembly);
 
 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyApp", policy =>
@@ -135,7 +136,7 @@ builder.Services.AddCors(options =>
                 .AllowCredentials();
     });
 });
-// Build application
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -151,8 +152,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Uncomment if you want to enable the exception middleware
-// app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseCors("MyApp");
 
 app.UseRateLimiter();

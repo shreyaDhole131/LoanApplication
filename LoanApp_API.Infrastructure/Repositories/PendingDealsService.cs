@@ -32,22 +32,23 @@ namespace LoanApp_API.Infrastructure.Repositories
                 LoanAmount = ld.LoanAmount,
                 InterestRate = ld.InterestRate,
                 TenureMonths = ld.TenureMonths,
-                EmiAmount = ld.EmiAmount
+                EmiAmount = ld.EmiAmount,
+                CibilScore = ld.customers.cibilReport.CibilScore
             }).FirstOrDefaultAsync();
         }
 
-        public async Task<List<PendingDealsDTO>> fetchPendingDeals()
-        {
-           return await db.LoanDeals.Include(ld => ld.customers).Where(ld => ld.CurrentStatus == "Pending").Select(ld => new PendingDealsDTO
-            {
-                DealId = ld.DealId,
-                CustomerName = ld.customers.FirstName + " " + ld.customers.LastName,
-                LoanType = ld.LoanType,
-                LoanAmount = ld.LoanAmount,
-               AppliedDate= ld.AppliedDate,
-                Status = "Pending"
-            }).ToListAsync();
-        }
+        //public async Task<List<PendingDealsDTO>> fetchPendingDeals()
+        //{
+        //   return await db.LoanDeals.Include(ld => ld.customers).Where(ld => ld.CurrentStatus == "Pending").Select(ld => new PendingDealsDTO
+        //    {
+        //        DealId = ld.DealId,
+        //        CustomerName = ld.customers.FirstName + " " + ld.customers.LastName,
+        //        LoanType = ld.LoanType,
+        //        LoanAmount = ld.LoanAmount,
+        //       AppliedDate= ld.AppliedDate,
+        //        Status = "Pending"
+        //    }).ToListAsync();
+        //}
 
         public async Task reviewDeal(int dealId, string status,int officerId)
         {

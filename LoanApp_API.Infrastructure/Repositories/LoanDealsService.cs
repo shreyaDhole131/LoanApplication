@@ -91,5 +91,25 @@ namespace LoanApp_API.Infrastructure.Repositories
 
             return Math.Round((decimal)emi, 2);
         }
+
+        public LoanPreviewResponseDTO CalculatePreview(decimal loanAmount, int tenureMonths)
+        {
+            decimal rate =  tenureMonths switch
+            {
+                36 => 11.5m,
+                60 => 11m,
+                72 => 11m,
+                120 => 11m,
+                _ => throw new InvalidOperationException($"Tenure {tenureMonths} not supported")
+            };
+
+            decimal emi = CalculateEmi(loanAmount, rate, tenureMonths);
+
+            return new LoanPreviewResponseDTO
+            {
+                InterestRate = rate,
+                EmiAmount = emi
+            };
+        }
     }
 }
