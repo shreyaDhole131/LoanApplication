@@ -11,11 +11,7 @@ namespace LoanApp_API.Application.DTO
 
         public decimal LoanAmount { get; set; }
 
-        public int InterestRate { get; set; }
-
         public int TenureMonths { get; set; }
-
-        public decimal EmiAmount { get; set; }
 
         public string BankName { get; set; }
 

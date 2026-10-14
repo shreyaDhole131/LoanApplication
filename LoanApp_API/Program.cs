@@ -13,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 using System.Threading.RateLimiting;
+//using QuestPDF.Infrastructure;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +48,8 @@ builder.Services.AddScoped<IEligibilityService, EligibilityService>();
 // Controllers and memory cache
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
+
+//QuestPDF.Settings.License = LicenseType.Community;
 
 // Rate limiting
 builder.Services.AddRateLimiter(options =>
@@ -124,7 +128,19 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"];
 }, typeof(MappingData).Assembly);
 
-// Build application
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -140,14 +156,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Uncomment if you want to enable the exception middleware
-// app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseCors("MyApp");
 
 app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 // Hangfire dashboard

@@ -1,7 +1,9 @@
 ﻿using LoanApp_API.Application.DTO;
 using LoanApp_API.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Metrics;
 
 namespace LoanApp_API.Controllers
 {
@@ -40,8 +42,8 @@ namespace LoanApp_API.Controllers
             if (dto.DealId <= 0)
                 return BadRequest(new { message = "DealId is required." });
 
-            await service.AddSanctionLetter(dto);
-            return Ok(new { message = "Sanction letter generated successfully." });
+            var letter =await service.AddSanctionLetter(dto);
+            return Ok(new { message = "Sanction letter generated successfully.", letterId = letter.SanctionId });
         }
 
         [HttpGet("grid")]
@@ -70,5 +72,24 @@ namespace LoanApp_API.Controllers
             return Ok(new { message = " Amount Disbursed successfully." });
 
         }
+
+        [HttpGet("{letterId}")]
+        public async Task<IActionResult> GetSanctionLetter(int letterId)
+        {
+            var letter = await service.GetSanctionLetter(letterId);
+            if (letter == null) return NotFound();
+            return Ok(letter);
+        }
+
+        [HttpGet("ViewPdf/{letterId}")]
+        public async Task<IActionResult> ViewPdf(int letterId)
+        {
+            var letter = await service.GetSanctionLetter(letterId);
+            if (letter == null) return NotFound();
+
+            var bytes = service.GenerateSanctionLetterPdf(letter);
+            return File(bytes, "application/pdf", $"SanctionLetter_{letterId}.pdf");
+        }
+
     }
 }
