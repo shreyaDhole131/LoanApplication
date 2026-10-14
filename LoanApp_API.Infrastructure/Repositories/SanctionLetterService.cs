@@ -72,16 +72,16 @@ namespace LoanApp_API.Infrastructure.Repositories
 
         public async Task<List<SanctionGridDTO>> fetchSanctionsGrid(string? name, string? FromDate, string? ToDate, string? Filter, string? sort)
         {
-            var query = db.SanctionLetters.AsQueryable();
+            var query = db.LoanDeals.Where(d => d.CurrentStatus == "Approved").AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
             {
-                query = query.Where(s => (s.deals.customers.FirstName + " " + s.deals.customers.LastName).Contains(name));
+                query = query.Where(d => (d.customers.FirstName + " " + d.customers.LastName).Contains(name));
             }
 
             if (!string.IsNullOrEmpty(FromDate) && DateTime.TryParse(FromDate, out var from))
             {
-                query = query.Where(s => s.CreatedAt >= from);
+                query = query.Where(d => d.AppliedDate  >= from);
 
             }
 
@@ -89,31 +89,32 @@ namespace LoanApp_API.Infrastructure.Repositories
             {
                 var toEnd = to.Date.AddDays(1);
 
-                query = query.Where(s => s.CreatedAt < toEnd);
+                query = query.Where(d => d.AppliedDate < toEnd);
             }
 
             if (!string.IsNullOrWhiteSpace(Filter))
             {
-                query = query.Where(s => s.deals.LoanType == Filter);
+                query = query.Where(d => d.LoanType == Filter);
             }
 
             if (!string.IsNullOrEmpty(sort))
             {
-                query = sort?.ToLower() == "ascending" ? query.OrderBy(s => s.CreatedAt) : query.OrderByDescending(s => s.CreatedAt);
+                query = sort?.ToLower() == "ascending" ? query.OrderBy(d => d.AppliedDate) : query.OrderByDescending(d => d.AppliedDate);
             }
 
-            return await query.Select(s => new SanctionGridDTO
+            return await query.Select(d => new SanctionGridDTO
             {
-                CustomerID = s.deals.customers.CustomerId,
-                CustomerName = s.deals.customers.FirstName + " " + s.deals.customers.LastName,
-                LoanAmount = s.LoanAmount,
-                LoanType = s.deals.LoanType,
-                InterestRate = s.InterestRate,
-                TenureMonths = s.TenureMonths,
-                EmiAmount = s.EmiAmount,
-                AppliedDate = s.CreatedAt,
-                IsDisbursed = s.deals.disbursement != null,       
-                DisbursementStatus = s.deals.disbursement == null
+                SanctionLetterId = d.sanctionLetters.SanctionId,
+                CustomerID = d.customers.CustomerId,
+                CustomerName = d.customers.FirstName + " " + d.customers.LastName,
+                LoanAmount = d.LoanAmount,
+                LoanType = d.LoanType,
+                InterestRate = d.InterestRate,
+                TenureMonths = d.TenureMonths,
+                EmiAmount = d.EmiAmount,
+                AppliedDate = d.AppliedDate,
+                IsDisbursed = d.disbursement != null,       
+                DisbursementStatus = d.disbursement == null
                             ? "Not Disbursed"
                             : "Disbursed"
             }).ToListAsync();
