@@ -21,12 +21,12 @@ namespace LoanApp_API.Infrastructure.Repositories
             this.mapper = mapper;
         }
 
-        public async Task AddSanctionLetter(CreateSanctionDTO dto)
+        public async Task<SanctionLetters> AddSanctionLetter(CreateSanctionDTO dto)
         {
             var letter = mapper.Map<SanctionLetters>(dto);
             await db.SanctionLetters.AddAsync(letter);
             await db.SaveChangesAsync();
-
+            return letter;
         }
 
         public async Task<List<PendingSanctionDTO>> fetchCustomers()
@@ -117,6 +117,26 @@ namespace LoanApp_API.Infrastructure.Repositories
                             ? "Not Disbursed"
                             : "Disbursed"
             }).ToListAsync();
+        }
+
+        public async Task<SanctionLetterDTO?> GetSanctionLetter(int letterId)
+        {
+            return await db.SanctionLetters
+        .Where(l => l.SanctionId== letterId)
+        .Select(l => new SanctionLetterDTO
+        {
+            SanctionLetterId = l.SanctionId,
+            DealId = l.DealId,
+            LoanAmount = l.LoanAmount,
+            LoanType = l.deals.LoanType,
+            TenureMonths = l.TenureMonths,
+            InterestRate = l.InterestRate,
+            EmiAmount = l.EmiAmount,
+            CreatedAt = l.CreatedAt,
+            CustomerName = l.deals.customers.FirstName + " " + l.deals.customers.LastName,
+            MobileNo = l.deals.customers.MobileNo
+        })
+        .FirstOrDefaultAsync();
         }
     }
 }
