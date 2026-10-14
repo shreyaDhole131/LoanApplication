@@ -13,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 using System.Threading.RateLimiting;
+using QuestPDF.Infrastructure;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +48,8 @@ builder.Services.AddScoped<IEligibilityService, EligibilityService>();
 // Controllers and memory cache
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 // Rate limiting
 builder.Services.AddRateLimiter(options =>

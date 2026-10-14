@@ -1,5 +1,6 @@
 ﻿using LoanApp_API.Application.DTO;
 using LoanApp_API.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.Metrics;
@@ -79,5 +80,16 @@ namespace LoanApp_API.Controllers
             if (letter == null) return NotFound();
             return Ok(letter);
         }
+
+        [HttpGet("ViewPdf/{letterId}")]
+        public async Task<IActionResult> ViewPdf(int letterId)
+        {
+            var letter = await service.GetSanctionLetter(letterId);
+            if (letter == null) return NotFound();
+
+            var bytes = service.GenerateSanctionLetterPdf(letter);
+            return File(bytes, "application/pdf", $"SanctionLetter_{letterId}.pdf");
+        }
+
     }
 }
