@@ -104,7 +104,10 @@ namespace LoanApp_API.Infrastructure.Repositories
 
             return await query.Select(d => new SanctionGridDTO
             {
-                SanctionLetterId = d.sanctionLetters.SanctionId,
+                SanctionLetterId = d.sanctionLetters == null
+                        ? (int?)null
+                        : d.sanctionLetters.SanctionId,
+                DealId = d.DealId,
                 CustomerID = d.customers.CustomerId,
                 CustomerName = d.customers.FirstName + " " + d.customers.LastName,
                 LoanAmount = d.LoanAmount,
@@ -113,10 +116,11 @@ namespace LoanApp_API.Infrastructure.Repositories
                 TenureMonths = d.TenureMonths,
                 EmiAmount = d.EmiAmount,
                 AppliedDate = d.AppliedDate,
-                IsDisbursed = d.disbursement != null,       
-                DisbursementStatus = d.disbursement == null
-                            ? "Not Disbursed"
-                            : "Disbursed"
+
+                IsDisbursed = d.disbursement != null,
+                DisbursementStatus = db.Disbursements.Any(x => x.DealId == d.DealId)
+                        ? "Disbursed"
+                        : "Not Disbursed"
             }).ToListAsync();
         }
 
