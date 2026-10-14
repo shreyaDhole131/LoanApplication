@@ -6,6 +6,7 @@ namespace LoanApp_API.Application.DTO
 {
     public class SanctionGridDTO
     {
+        public int SanctionLetterId { get; set; }
         public int CustomerID { get; set; }
 
         public string CustomerName { get; set; }
