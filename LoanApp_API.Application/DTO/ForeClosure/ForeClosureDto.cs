@@ -33,6 +33,7 @@ namespace LoanApp_API.Application.DTO.ForeClosure
     // "My Foreclosure Requests" table
     public class CustomerForeClosureDto
     {
+        public int RequestId { get; set; }                 // needed for the Pay button
         public string LoanAccountNo { get; set; } = "";
         public decimal Amount { get; set; }
         public string ForeClosureType { get; set; } = "";
