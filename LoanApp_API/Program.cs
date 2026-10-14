@@ -124,17 +124,7 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"];
 }, typeof(MappingData).Assembly);
 
-<<<<<<< HEAD
-builder.Services.AddCors(options => options.AddPolicy("MyApp", policy =>
-{
 
-    policy.WithOrigins("http://localhost:4200")
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .AllowCredentials();
-}));
-
-=======
 
 builder.Services.AddCors(options =>
 {
@@ -146,8 +136,7 @@ builder.Services.AddCors(options =>
                 .AllowCredentials();
     });
 });
->>>>>>> da8e623b41adc34654db909e34b836167463d683
-// Build application
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -164,10 +153,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-app.UseCors("MyApp");
-
-// Uncomment if you want to enable the exception middleware
-// app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors("MyApp");
 
 app.UseRateLimiter();
