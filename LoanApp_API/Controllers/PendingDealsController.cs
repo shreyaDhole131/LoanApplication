@@ -25,13 +25,13 @@ namespace LoanApp_API.Controllers
 
         }
 
-        [HttpGet("PendingDeals")]
+        //[HttpGet("PendingDeals")]
 
-        public async Task<IActionResult> fetchPendingDeals()
-        {
-            var data = await service.fetchPendingDeals();
-            return Ok(data);
-        }
+        //public async Task<IActionResult> fetchPendingDeals()
+        //{
+        //    var data = await service.fetchPendingDeals();
+        //    return Ok(data);
+        //}
 
         [HttpGet("SortingPending")]
 

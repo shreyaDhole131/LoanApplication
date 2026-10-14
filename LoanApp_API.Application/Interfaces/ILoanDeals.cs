@@ -10,6 +10,8 @@ namespace LoanApp_API.Application.Interfaces
     {
         Task<LoanDeals> applyLoan(LoanDealDTO dto, int userId);
 
+        LoanPreviewResponseDTO CalculatePreview(decimal loanAmount, int tenureMonths);
+
 
     }
 }

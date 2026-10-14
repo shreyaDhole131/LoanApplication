@@ -7,7 +7,7 @@ namespace LoanApp_API.Application.Interfaces
 {
     public interface IPendingDeals
     {
-        Task<List<PendingDealsDTO>> fetchPendingDeals();
+        //Task<List<PendingDealsDTO>> fetchPendingDeals();
 
         Task<CustomerShowProfileDTO?> fetchCustomerProfile(int dealId);
 
