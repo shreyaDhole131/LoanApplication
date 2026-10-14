@@ -17,6 +17,7 @@ namespace LoanApp_API.Application.DTO
         public decimal EmiAmount { get; set; }
         public DateTime DisbursementDate { get; set; }
         public decimal TotalPaidAmount { get; set; }
+        public DateTime CreatedAt { get; set; }
 
     }
 }
