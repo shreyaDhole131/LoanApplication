@@ -14,6 +14,7 @@ using Microsoft.OpenApi;
 using System.Text;
 using System.Threading.RateLimiting;
 using QuestPDF.Infrastructure;
+using LoanApp_API.Application.Interfaces.Reports;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,6 +45,14 @@ builder.Services.AddScoped<IPendingDeals, PendingDealsService>();
 builder.Services.AddScoped<ICibilService, CibilService>();
 builder.Services.AddScoped<IScoreCardService, ScoreCardService>();
 builder.Services.AddScoped<IEligibilityService, EligibilityService>();
+
+builder.Services.AddScoped<ICibilReport, CibiReportService>();
+builder.Services.AddScoped<IScoreReport, ScoreReportService>();
+builder.Services.AddScoped<IProductWiseReport, ProductWiseReportService>();
+builder.Services.AddScoped<ILoanProtfolio, LoanProtfolioService>();
+builder.Services.AddScoped<IEmiReport, EmiReportService>();
+builder.Services.AddScoped<IDisburseReport,DisburseReportService>();
+
 
 // Controllers and memory cache
 builder.Services.AddControllers();

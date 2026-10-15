@@ -11,8 +11,8 @@ namespace LoanApp_API.Application.Interfaces
 
         Task<CustomerShowProfileDTO?> fetchCustomerProfile(int dealId);
 
-        Task<List<PendingDealsDTO>> sortPendingDeals(string? LoanType,decimal? MinAmount,decimal? MaxAmount,string? dateFilter, DateOnly? FromFilter,
-            DateOnly? ToFilter);
+        Task<List<PendingDealsDTO>> sortPendingDeals(string? LoanType,decimal? MinAmount,decimal? MaxAmount,string? dateFilter,  DateOnly? FromFilter,
+            DateOnly? ToFilter, string? search);
 
         Task reviewDeal(int dealId, string status, int officerId);
     }

@@ -44,10 +44,12 @@ namespace LoanApp_API.Infrastructure.Repositories
 
             var ranges = new (string label, int Min, int Max)[]
             {
-                ("800-899",800,899),
-                ("750-799",750,799),
-                ("700-749",700,749),
-                ("650-699",650,699)
+                ("900+",      900, 900),
+                ("800-899",   800, 899),
+                ("750-799",   750, 799),
+                ("700-749",   700, 749),
+                ("650-699",   650, 699),
+                ("Below 650", 300, 649)
             };
 
             var result = new List<CibiReportDTO>();
