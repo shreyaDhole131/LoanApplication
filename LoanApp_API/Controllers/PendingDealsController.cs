@@ -36,9 +36,9 @@ namespace LoanApp_API.Controllers
         [HttpGet("SortingPending")]
 
         public async Task<IActionResult> sortPendingDeals([FromQuery]string? LoanType,
-            [FromQuery] decimal? MinAmount, [FromQuery] decimal? MaxAmount, [FromQuery] string? dateFilter, [FromQuery] DateOnly? FromFilter, [FromQuery] DateOnly? ToFilter)
+            [FromQuery] decimal? MinAmount, [FromQuery] decimal? MaxAmount, [FromQuery] string? dateFilter, [FromQuery] DateOnly? FromFilter, [FromQuery] DateOnly? ToFilter, [FromQuery] string? search)
         {
-            var data = await service.sortPendingDeals(LoanType,MinAmount,MaxAmount,dateFilter,FromFilter,ToFilter);
+            var data = await service.sortPendingDeals(LoanType,MinAmount,MaxAmount,dateFilter,FromFilter,ToFilter,search);
             return Ok(data);
         }
 

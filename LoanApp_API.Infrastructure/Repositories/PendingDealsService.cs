@@ -71,7 +71,7 @@ namespace LoanApp_API.Infrastructure.Repositories
 
         }
 
-        public async Task<List<PendingDealsDTO>> sortPendingDeals(string? LoanType, decimal? MinAmount, decimal? MaxAmount, string? dateFilter, DateOnly? FromFilter, DateOnly? ToFilter)
+        public async Task<List<PendingDealsDTO>> sortPendingDeals(string? LoanType, decimal? MinAmount, decimal? MaxAmount, string? dateFilter,  DateOnly? FromFilter, DateOnly? ToFilter, string? search)
         {
             var query = db.LoanDeals.Where(ld => ld.CurrentStatus == "Pending");
 
@@ -113,6 +113,15 @@ namespace LoanApp_API.Infrastructure.Repositories
             {
                 var to = ToFilter.Value.ToDateTime(TimeOnly.MinValue).AddDays(1);
                 query = query.Where(ld => ld.AppliedDate < to);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                
+                query = query.Where(ld =>
+                    (ld.customers.FirstName + " " + ld.customers.LastName).Contains(search)
+                    || ld.LoanType.Contains(search));
+                
             }
 
             query = dateFilter == "Ascending"

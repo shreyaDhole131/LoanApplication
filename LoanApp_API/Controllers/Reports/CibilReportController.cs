@@ -1,4 +1,4 @@
-﻿using LoanApp_API.Infrastructure.Repositories;
+﻿using LoanApp_API.Application.Interfaces.Reports;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +9,9 @@ namespace LoanApp_API.Controllers.Reports
     [ApiController]
     public class CibilReportController : ControllerBase
     {
-        CibiReportService service;
+         ICibilReport service;
 
-        public CibilReportController(CibiReportService service)
+        public CibilReportController(ICibilReport service)
         {
             this.service = service;
         }
