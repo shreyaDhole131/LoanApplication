@@ -88,8 +88,26 @@ namespace LoanApp_API.Controllers
             if (letter == null) return NotFound();
 
             var bytes = service.GenerateSanctionLetterPdf(letter);
-            return File(bytes, "application/pdf", $"SanctionLetter_{letterId}.pdf");
+
+            Response.Headers.ContentDisposition = $"inline; filename=\"SanctionLetter_{letterId}.pdf\"";
+            return File(bytes, "application/pdf");
         }
+
+
+
+        [HttpGet("DownloadPdf/{letterId}")]
+        public async Task<IActionResult> DownloadPdf(int letterId)
+        {
+            var letter = await service.GetSanctionLetter(letterId);
+            if (letter == null) return NotFound();
+
+            var bytes = service.GenerateSanctionLetterPdf(letter);
+
+            Response.Headers.ContentDisposition = $"attachment; filename=\"SanctionLetter_{letterId}.pdf\"";
+            return File(bytes, "application/pdf");
+        }
+
+
 
     }
 }
