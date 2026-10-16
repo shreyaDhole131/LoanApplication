@@ -1,4 +1,5 @@
-﻿using LoanApp_API.Infrastructure.Repositories;
+﻿using LoanApp_API.Application.Interfaces.Reports;
+using LoanApp_API.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +9,9 @@ namespace LoanApp_API.Controllers.Reports
     [ApiController]
     public class PrePaymentController : ControllerBase
     {
-        PrepaymentReportService service;
+        IPrepaymentReport service;
 
-        public PrePaymentController(PrepaymentReportService service)
+        public PrePaymentController(IPrepaymentReport service)
         {
             this.service = service;
         }
