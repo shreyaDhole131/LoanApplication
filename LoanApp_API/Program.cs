@@ -54,6 +54,7 @@ builder.Services.AddScoped<IEmiReport, EmiReportService>();
 builder.Services.AddScoped<IDisburseReport,DisburseReportService>();
 builder.Services.AddScoped<IPrepaymentReport, PrepaymentReportService>();
 builder.Services.AddScoped<IOverdueReport, OverdueReportService>();
+builder.Services.AddScoped<ITatReport, TatServiceReport>();
 
 
 // Controllers and memory cache
