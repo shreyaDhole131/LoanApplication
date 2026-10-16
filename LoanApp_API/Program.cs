@@ -53,6 +53,7 @@ builder.Services.AddScoped<ILoanProtfolio, LoanProtfolioService>();
 builder.Services.AddScoped<IEmiReport, EmiReportService>();
 builder.Services.AddScoped<IDisburseReport,DisburseReportService>();
 builder.Services.AddScoped<IPrepaymentReport, PrepaymentReportService>();
+builder.Services.AddScoped<IOverdueReport, OverdueReportService>();
 
 
 // Controllers and memory cache
